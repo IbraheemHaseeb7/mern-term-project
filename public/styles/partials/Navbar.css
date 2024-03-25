@@ -1,0 +1,35 @@
+/* Navbar container */
+.navbar {
+    background-color: #f8f8f8;
+    padding: 10px;
+}
+
+/* Navbar logo */
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Navbar links */
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.navbar .nav-links li {
+    margin-left: 10px;
+}
+
+.navbar .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Active link */
+.navbar .nav-links a.active {
+    color: #ff0000;
+}
