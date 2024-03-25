@@ -1,0 +1,26 @@
+const { Schema, model, Types } = require("mongoose");
+
+const userSchema = new Schema(
+    {
+        _id: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId(),
+        },
+        name: String,
+        joiningDate: Date,
+        friendsCount: Number,
+        friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        bio: String,
+        pictureUri: String,
+        coverUri: String,
+    },
+    { collection: "User" }
+);
+
+const User = model("User", userSchema);
+module.exports = { User };
