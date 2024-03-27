@@ -2,7 +2,7 @@ const express = require("express");
 const { User } = require("../models/User");
 const router = express.Router();
 
-router.get("/users", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const id = req.query.id;
         if (id) {
@@ -17,16 +17,7 @@ router.get("/users", async (req, res) => {
     }
 });
 
-router.post("/users", async (req, res) => {
-    try {
-        await insertUser(req.body);
-        res.status(201).json({ message: "Successfully inserted one user" });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-router.patch("/users/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
     try {
         const id = req.params.id;
         await updateUser(id, req.body);
@@ -36,7 +27,7 @@ router.patch("/users/:id", async (req, res) => {
     }
 });
 
-router.delete("/users", async (req, res) => {
+router.delete("/", async (req, res) => {
     try {
         const id = req.query.id;
         await deleteUser(id);
@@ -56,12 +47,6 @@ async function getUsers() {
 // Gets a user by id from the database
 async function getUserById(id) {
     return await User.findById(id);
-}
-
-// Inserts a user into the database
-async function insertUser(user) {
-    const newUser = new User(user);
-    return await newUser.save();
 }
 
 // Update a user into the database

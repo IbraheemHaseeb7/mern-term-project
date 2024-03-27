@@ -7,6 +7,8 @@ const userSchema = new Schema(
             default: () => new Types.ObjectId(),
         },
         name: String,
+        email: String,
+        password: String,
         joiningDate: Date,
         friendsCount: Number,
         friends: [
