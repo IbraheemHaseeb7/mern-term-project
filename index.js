@@ -1,5 +1,6 @@
 const express = require("express");
 const { connectDB } = require("./config/database");
+const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = 3000;
 
@@ -11,6 +12,7 @@ const authRoutes = require("./routes/Auth");
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(express.json());
+app.use(cookieParser());
 
 // Using Routes
 app.use("/api/users", userRoutes);
@@ -18,6 +20,10 @@ app.use("/api", authRoutes);
 
 app.get("/", (req, res) => {
     res.render("index.ejs");
+});
+
+app.get("/login", (req, res) => {
+    res.render("login.ejs");
 });
 
 app.listen(process.env.PORT || PORT, () => {

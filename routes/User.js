@@ -1,8 +1,9 @@
 const express = require("express");
 const { User } = require("../models/User");
 const router = express.Router();
+const verifyToken = require("../middlewares/Token");
 
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
     try {
         const id = req.query.id;
         if (id) {
@@ -17,7 +18,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", verifyToken, async (req, res) => {
     try {
         const id = req.params.id;
         await updateUser(id, req.body);
@@ -27,7 +28,7 @@ router.patch("/:id", async (req, res) => {
     }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", verifyToken, async (req, res) => {
     try {
         const id = req.query.id;
         await deleteUser(id);
