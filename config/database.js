@@ -14,4 +14,12 @@ async function connectDB() {
     }
 }
 
-module.exports = { connectDB };
+async function closeConnectionToDB() {
+    try {
+        await mongoose.connection.close();
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+module.exports = { connectDB, closeConnectionToDB };

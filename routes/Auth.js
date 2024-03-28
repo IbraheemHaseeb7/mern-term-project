@@ -14,7 +14,7 @@ router.post("/token/login", async (req, res) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
 
         const isPasswordValid = bcrypt.compare(password, user.password);
@@ -22,9 +22,7 @@ router.post("/token/login", async (req, res) => {
             return res.status(400).json({ message: "Invalid Password" });
         }
 
-        const token = jwt.sign({ user: user.id }, process.env.SECRET_KEY, {
-            expiresIn: "1h",
-        });
+        const token = jwt.sign({ user: user.id }, process.env.SECRET_KEY);
 
         res.cookie("token", token, { httpOnly: true });
         return res.status(200).json({ message: "Successfully logged in" });
