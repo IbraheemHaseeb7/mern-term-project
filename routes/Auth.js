@@ -86,6 +86,7 @@ function insertUser(
                 coverUri,
                 pictureUri,
             });
+
             await user.save();
             return resolve("Successfully inserted user");
         } catch (e) {
@@ -98,3 +99,4 @@ async function encryptPassword(password) {
     const salt = bcrypt.genSaltSync(10);
     return await bcrypt.hash(password, salt);
 }
+

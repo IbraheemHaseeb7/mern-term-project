@@ -8,23 +8,19 @@ app.use("/api/users", router);
 
 jest.mock("../middlewares/Token", () => jest.fn((req, res, next) => next()));
 
+const data = [
+    { id: 123, name: "test" },
+    { id: 124, name: "test2" },
+    { id: 125, name: "test3" },
+];
+
 jest.mock("../models/User", () => ({
     User: {
-        findOne: jest
-            .fn()
-            .mockImplementation(() =>
-                Promise.resolve({ id: "123", name: "test" })
-            ),
-        find: jest
-            .fn()
-            .mockImplementation(() =>
-                Promise.resolve([{ id: "123", name: "test" }])
-            ),
-        findByIdAndUpdate: jest
-            .fn()
-            .mockImplementation(() =>
-                Promise.resolve({ id: "123", name: "test" })
-            ),
+        findOne: jest.fn().mockImplementation(() => Promise.resolve(data[0])),
+        find: jest.fn().mockImplementation(() => Promise.resolve(data)),
+        findByIdAndUpdate: jest.fn().mockImplementation((id) => {
+            return Promise.resolve({ ...data.find((d) => d.id === id) });
+        }),
         findByIdAndDelete: jest
             .fn()
             .mockImplementation(() => Promise.resolve({})),
@@ -38,7 +34,7 @@ describe("GET /", () => {
             .set("Accept", "application/json");
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body).toEqual([{ id: "123", name: "test" }]);
+        expect(res.body).toEqual(data);
     });
 });
 
@@ -72,6 +68,5 @@ describe("DELETE /?id=123", () => {
             .set("Accept", "application/json");
 
         expect(res.statusCode).toEqual(400);
-        // expect(res.body).toHaveProperty("message");
     });
 });

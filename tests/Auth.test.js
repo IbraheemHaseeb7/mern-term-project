@@ -1,7 +1,6 @@
 const request = require("supertest");
 const express = require("express");
 const router = require("../routes/Auth");
-const { connectDB, closeConnectionToDB } = require("../config/database");
 
 const app = express();
 app.use(express.json());
@@ -32,6 +31,14 @@ jest.mock("bcrypt", () => ({
             return false;
         }
     }),
+
+    genSaltSync: jest.fn().mockImplementation(() => null),
+
+    hash: jest.fn().mockImplementation((password, salt) => password),
+}));
+
+jest.mock("jsonwebtoken", () => ({
+    sign: jest.fn().mockImplementation(() => "token"),
 }));
 
 describe("POST /login", () => {
@@ -79,5 +86,20 @@ describe("POST /login", () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty("message");
+    });
+});
+
+describe("POST /signup", () => {
+    it("responds with json", async () => {
+        const res = await request(app).post("/api/token/signup").send({
+            name: "Abc",
+            email: "abc@abc.com",
+            password: "a1s2d3f4",
+            age: 20,
+        });
+
+        console.log(res.body);
+
+        expect(res.statusCode).toEqual(200);
     });
 });
