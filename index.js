@@ -7,6 +7,7 @@ const PORT = 3000;
 // Creating Routes
 const userRoutes = require("./routes/User");
 const authRoutes = require("./routes/Auth");
+const postRoutes = require("./routes/Post");
 
 // Setting middlewares and view engine
 app.use(express.static("public"));
@@ -17,6 +18,7 @@ app.use(cookieParser());
 // Using Routes
 app.use("/api/users", userRoutes);
 app.use("/api", authRoutes);
+app.use("/api/posts", postRoutes);
 
 app.get("/", (req, res) => {
     res.render("index.ejs");
