@@ -10,13 +10,16 @@ const postSchema = new Schema(
             type: Schema.Types.Date,
             default: () => new Date(),
         },
-        description: String,
-        likesCount: Number,
-        commentsCount: Number,
-
+        description: Schema.Types.String,
+        likesCount: Schema.Types.Number,
+        commentsCount: Schema.Types.Number,
         likes: [
             {
-                userId: String,
+                userId: {
+                    type: Schema.Types.String,
+                    ref: "User",
+                },
+                _id: false,
                 timestamp: {
                     type: Schema.Types.Date,
                     default: () => new Date(),
@@ -25,16 +28,22 @@ const postSchema = new Schema(
         ],
         comments: [
             {
-                userId: String,
-                description: String,
+                userId: {
+                    type: Schema.Types.String,
+                    ref: "User",
+                },
+                description: Schema.Types.String,
                 timestamp: {
                     type: Schema.Types.Date,
                     default: () => new Date(),
                 },
-                likesCount: Number,
+                likesCount: Schema.Types.Number,
                 likes: [
                     {
-                        userId: String,
+                        userId: {
+                            type: Schema.Types.String,
+                            ref: "User",
+                        },
                         timestamp: {
                             type: Schema.Types.Date,
                             default: () => new Date(),
@@ -43,7 +52,10 @@ const postSchema = new Schema(
                 ],
             },
         ],
-        userId: String,
+        userId: {
+            type: Schema.Types.ObjectId,
+            required: true,
+        },
     },
     { collection: "Post" }
 );
