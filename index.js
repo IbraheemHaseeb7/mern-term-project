@@ -8,6 +8,7 @@ const PORT = 3000;
 const userRoutes = require("./routes/User");
 const authRoutes = require("./routes/Auth");
 const postRoutes = require("./routes/Post");
+const pageRoutes = require("./routes/Pages");
 
 // Setting middlewares and view engine
 app.use(express.static("public"));
@@ -19,14 +20,7 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api/posts", postRoutes);
-
-app.get("/", (req, res) => {
-    res.render("index.ejs");
-});
-
-app.get("/login", (req, res) => {
-    res.render("login.ejs");
-});
+app.use("/", pageRoutes);
 
 app.listen(process.env.PORT || PORT, () => {
     console.log(`Server is running on port ${PORT}`);

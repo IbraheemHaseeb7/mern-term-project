@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= title %></title>
+        <link href="styles/partials/Form.css" rel="stylesheet" />
+        <link href="styles/general.css" rel="stylesheet" />
+        <link href="styles/auth.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="main-container">
+            <h1><%= title %></h1>
+            <% if (title === "Login") { %> <%- include('partials/LoginForm') %>
+            <% } else { %> <%- include('partials/SignupForm') %> <% } %>
+        </div>
+    </body>
+    <script src="scripts/auth.js"></script>
+</html>
