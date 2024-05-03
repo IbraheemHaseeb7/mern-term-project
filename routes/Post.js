@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Post } = require("../models/Post");
+const Post = require("../models/Post");
 
 // for getting 20 Posts
 router.get("/", async (req, res) => {

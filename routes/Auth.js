@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const { User } = require("../models/User");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 router.post("/token/login", async (req, res) => {
@@ -99,4 +99,3 @@ async function encryptPassword(password) {
     const salt = bcrypt.genSaltSync(10);
     return await bcrypt.hash(password, salt);
 }
-

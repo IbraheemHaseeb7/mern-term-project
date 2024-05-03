@@ -6,22 +6,57 @@ const app = express();
 app.use(express.json());
 app.use("/api", router);
 
-jest.mock("../models/User", () => ({
-    User: {
-        findOne: jest.fn().mockImplementation((filter) => {
-            if (filter.email === "abc@abc.com") {
-                return Promise.resolve(null);
-            } else {
-                return Promise.resolve({
-                    id: "123",
-                    name: "test",
-                    email: "test@test.com",
-                    password: "a1s2d3f4",
-                });
-            }
+jest.mock("../models/User", () => {
+    return {
+        find: jest.fn().mockImplementation(() => {
+            return [
+                {
+                    _id: "123",
+                    name: "Test User",
+                    email: "test@example.com",
+                    password: "password",
+                    joiningDate: new Date(),
+                    friendsCount: 0,
+                    friends: [],
+                    bio: "This is a test user",
+                    pictureUri: "http://example.com/picture.jpg",
+                    coverUri: "http://example.com/cover.jpg",
+                },
+            ];
         }),
-    },
-}));
+        findById: jest.fn().mockImplementation((id) => {
+            return {
+                _id: id,
+                name: "Test User",
+                email: "test@example.com",
+                password: "password",
+                joiningDate: new Date(),
+                friendsCount: 0,
+                friends: [],
+                bio: "This is a test user",
+                pictureUri: "http://example.com/picture.jpg",
+                coverUri: "http://example.com/cover.jpg",
+            };
+        }),
+        findOne: jest.fn().mockImplementation(({ email }) => {
+            if (email === "abc@abc.com") {
+                return null;
+            }
+            return {
+                _id: "123",
+                name: "Test User",
+                email: "test@example.com",
+                password: "a1s2d3f4",
+                joiningDate: new Date(),
+                friendsCount: 0,
+                friends: [],
+                bio: "This is a test user",
+                pictureUri: "http://example.com/picture.jpg",
+                coverUri: "http://example.com/cover.jpg",
+            };
+        }),
+    };
+});
 
 jest.mock("bcrypt", () => ({
     compare: jest.fn().mockImplementation((typedPassword, searchedPassword) => {
@@ -98,7 +133,9 @@ describe("POST /signup", () => {
             age: 20,
         });
 
+        console.log("==============================");
         console.log(res.body);
+        console.log("==============================");
 
         expect(res.statusCode).toEqual(200);
     });
