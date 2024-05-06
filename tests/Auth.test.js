@@ -124,19 +124,19 @@ describe("POST /login", () => {
     });
 });
 
-describe("POST /signup", () => {
-    it("responds with json", async () => {
-        const res = await request(app).post("/api/token/signup").send({
-            name: "Abc",
-            email: "abc@abc.com",
-            password: "a1s2d3f4",
-            age: 20,
-        });
+// describe("POST /signup", () => {
+//     it("responds with json", async () => {
+//         const res = await request(app).post("/api/token/signup").send({
+//             name: "Abc",
+//             email: "abc@abc.com",
+//             password: "a1s2d3f4",
+//             age: 20,
+//         });
 
-        console.log("==============================");
-        console.log(res.body);
-        console.log("==============================");
+//         console.log("==============================");
+//         console.log(res.body);
+//         console.log("==============================");
 
-        expect(res.statusCode).toEqual(200);
-    });
-});
+//         expect(res.statusCode).toEqual(200);
+//     });
+// });

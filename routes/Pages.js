@@ -1,8 +1,16 @@
 const express = require("express");
 const router = express.Router();
+const axios = require("axios");
 
 router.get("/", (req, res) => {
-    res.render("index.ejs");
+    axios
+        .get("http://localhost:3000/api/posts")
+        .then((response) => {
+            res.render("index.ejs", { posts: response.data });
+        })
+        .catch((err) => {
+            res.render("index.ejs", { posts: [] });
+        });
 });
 
 router.get("/login", (req, res) => {

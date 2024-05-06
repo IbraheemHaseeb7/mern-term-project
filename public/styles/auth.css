@@ -21,3 +21,9 @@ body {
     margin: 0;
     align-self: flex-start;
 }
+
+.logo {
+    cursor: pointer;
+    width: 10rem;
+    object-fit: contain;
+}

@@ -1,3 +1,21 @@
+* {
+    font-family: "Calibri", "Trebuchet MS", sans-serif;
+}
+
+input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.493);
+}
+
+input:hover,
+input:focus,
+input:active {
+    border: 1px solid rgba(0, 0, 0, 0.76);
+}
+
 button {
     background-color: #1990ff;
     color: white;

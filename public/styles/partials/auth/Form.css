@@ -22,20 +22,16 @@ form > div {
     width: 93%;
 }
 
-form > div > input {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    border-radius: 5px;
-    outline: none;
-    border: 1px solid rgba(0, 0, 0, 0.493);
-}
-
-form > div > input:hover,
-form > div > input:focus,
-form > div > input:active {
-    border: 1px solid rgba(0, 0, 0, 0.76);
-}
-
 form > div > label {
     align-self: flex-start;
+}
+
+.no-line {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #9e9e9e;
+}
+
+.no-line > a {
+    opacity: 0.8;
 }

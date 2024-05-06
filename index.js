@@ -9,6 +9,8 @@ const userRoutes = require("./routes/User");
 const authRoutes = require("./routes/Auth");
 const postRoutes = require("./routes/Post");
 const pageRoutes = require("./routes/Pages");
+const likeRoutes = require("./routes/Like");
+const commentRoutes = require("./routes/Comment");
 
 // Setting middlewares and view engine
 app.use(express.static("public"));
@@ -20,6 +22,8 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/likes", likeRoutes);
+app.use("/api/comments", commentRoutes);
 app.use("/", pageRoutes);
 
 app.listen(process.env.PORT || PORT, () => {

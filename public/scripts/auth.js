@@ -59,3 +59,9 @@ function handleSignup(e) {
             console.log(res);
         });
 }
+
+function handleLogoClick(e) {
+    e.preventDefault();
+
+    window.location.href = "/";
+}

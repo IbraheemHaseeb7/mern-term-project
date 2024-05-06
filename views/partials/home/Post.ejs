@@ -1,0 +1,36 @@
+<div class="wrapper">
+    <ul class="cards__list">
+      <li class="card">
+        <div class="card__header">
+          <img class="card__profile-img" src="https://www.syfy.com/sites/syfy/files/styles/1200x680/public/syfywire_cover_media/2018/09/c-3po-see-threepio_68fe125c.jpg" alt="c3po"/>
+        <div class="card__meta">
+          <div class="card__meta__displayname">
+            <%= name %>
+        </div>
+        <div class="card__meta__username">
+            <!-- <%= name %> -->
+        </div>
+        <div class="card__meta__timestamp">
+            <%= timePassed %>
+        </div>
+    </div>
+    <div class="card__menu">
+        <i class="fas fa-ellipsis-h"></i>
+    </div>
+</div>
+    <div class="card__body">
+            <%= description %>
+        </div>
+        <div class="card__footer">
+          <span class="card__footer__like">
+            <i class="far fa-heart"></i> <%= likesCount %>
+          </span>
+          <span class="card__footer__comment">
+            <i class="far fa-comment"></i> <%= commentsCount %>
+          </span>
+          <span class="card__footer__share">
+            <i class="fas fa-share-alt"></i>
+        </div>
+      </li>
+    </ul>
+  </div>

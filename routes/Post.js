@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
+const verifyToken = require("../middlewares/Token");
 
 // for getting 20 Posts
 router.get("/", async (req, res) => {
@@ -25,7 +26,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // for creating a new Post
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
     try {
         const body = req.body;
 
@@ -35,22 +36,6 @@ router.post("/", async (req, res) => {
 
         await writePost(body);
         res.status(201).json({ message: "Post created successfully" });
-    } catch (e) {
-        res.status(500).json({ message: e.message });
-    }
-});
-
-// for Liking a Post
-router.put("/", async (req, res) => {
-    try {
-        const body = req.body;
-
-        if (!body.postId || !body.userId) {
-            return res.status(400).json({ message: "Invalid Request" });
-        }
-
-        await likePost(body.postId, body.userId);
-        return res.status(201).json({ message: "Post liked successfully" });
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -95,30 +80,6 @@ async function writePost(post) {
 
             const uploadedPost = await newPost.save();
             resolve(uploadedPost);
-        } catch (e) {
-            reject(e);
-        }
-    });
-}
-
-function likePost(postId, userId) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const post = await Post.findById(postId);
-
-            if (!post) {
-                return reject({ message: "Post not found" });
-            }
-
-            if (post.likes.some((like) => like.userId === userId)) {
-                return reject({ message: "Post already liked" });
-            }
-
-            post.likes.addToSet({ userId: userId });
-            post.likesCount += 1;
-            await post.save();
-
-            resolve(post);
         } catch (e) {
             reject(e);
         }

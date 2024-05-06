@@ -13,45 +13,6 @@ const postSchema = new Schema(
         description: Schema.Types.String,
         likesCount: Schema.Types.Number,
         commentsCount: Schema.Types.Number,
-        likes: [
-            {
-                userId: {
-                    type: Schema.Types.String,
-                    ref: "User",
-                },
-                _id: false,
-                timestamp: {
-                    type: Schema.Types.Date,
-                    default: () => new Date(),
-                },
-            },
-        ],
-        comments: [
-            {
-                userId: {
-                    type: Schema.Types.String,
-                    ref: "User",
-                },
-                description: Schema.Types.String,
-                timestamp: {
-                    type: Schema.Types.Date,
-                    default: () => new Date(),
-                },
-                likesCount: Schema.Types.Number,
-                likes: [
-                    {
-                        userId: {
-                            type: Schema.Types.String,
-                            ref: "User",
-                        },
-                        timestamp: {
-                            type: Schema.Types.Date,
-                            default: () => new Date(),
-                        },
-                    },
-                ],
-            },
-        ],
         userId: {
             type: Schema.Types.ObjectId,
             required: true,
