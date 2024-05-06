@@ -1,16 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const axios = require("axios");
+const Post = require("../models/Post");
 
-router.get("/", (req, res) => {
-    axios
-        .get("http://localhost:3000/api/posts")
-        .then((response) => {
-            res.render("index.ejs", { posts: response.data });
-        })
-        .catch((err) => {
-            res.render("index.ejs", { posts: [] });
-        });
+router.get("/", async (req, res) => {
+    try {
+        const posts = await Post.find();
+        res.render("index.ejs", { posts: posts, error: null });
+    } catch (error) {
+        res.render("index.ejs", { posts: [], error: error.message });
+    }
 });
 
 router.get("/login", (req, res) => {

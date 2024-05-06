@@ -2,11 +2,17 @@ const express = require("express");
 const router = express.Router();
 const Comment = require("../models/Comment");
 const verifyToken = require("../middlewares/Token");
-const User = require("../models/User");
 const Post = require("../models/Post");
 const getUserIdFromToken = require("../utils/GetUserIdFromToken");
+const doesCommentExist = require("../middlewares/Comments");
+const doesPostExists = require("../middlewares/Post");
 
-router.post("/", verifyToken, async (req, res) => {
+// added post middleware because
+// we need to increment the comments count
+// in the post so we have to make database query
+// anyways so adding middleware would add more
+// protection to the route
+router.post("/", verifyToken, doesPostExists, async (req, res) => {
     try {
         const { description, postId } = req.body;
 
@@ -16,7 +22,12 @@ router.post("/", verifyToken, async (req, res) => {
 
         const cookies = req.cookies;
         const userId = getUserIdFromToken(cookies.token);
-        const response = await createComment(userId, postId, description);
+        const response = await createComment(
+            userId,
+            postId,
+            description,
+            req.post
+        );
 
         return res.status(201).json({
             message: "Comment created successfully",
@@ -27,25 +38,23 @@ router.post("/", verifyToken, async (req, res) => {
     }
 });
 
-router.delete("/", verifyToken, async (req, res) => {
+// added comment middleware because
+// we need to check if the comment is being
+// deleted by the person who made the comment
+router.delete("/", verifyToken, doesCommentExist, async (req, res) => {
     try {
         const cookes = req.cookies;
         const userIdFromToken = getUserIdFromToken(cookes.token);
 
         const { commentId } = req.body;
-
-        const comment = await Comment.findById(commentId);
-
-        if (!comment) {
-            return res.status(404).json({ message: "Comment Not Found" });
-        }
+        const comment = req.comment;
 
         if (comment.userId.toString() !== userIdFromToken) {
             return res.status(400).json({ message: "Bad Request" });
         }
 
         await Promise.all([
-            Comment.findByIdAndDelete(commentId),
+            comment.deleteOne(),
             Post.findByIdAndUpdate(comment.postId, {
                 $inc: { commentsCount: -1 },
             }),
@@ -61,19 +70,9 @@ router.delete("/", verifyToken, async (req, res) => {
 
 module.exports = router;
 
-function createComment(userId, postId, description) {
+function createComment(userId, postId, description, post) {
     return new Promise(async (res, rej) => {
         try {
-            if (User.findById(userId) === null) {
-                rej("User not found");
-            }
-
-            const post = await Post.findById(postId);
-
-            if (!post) {
-                rej("Post not found");
-            }
-
             const comment = new Comment({
                 userId: userId,
                 postId: postId,

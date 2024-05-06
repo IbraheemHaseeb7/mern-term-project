@@ -5,18 +5,19 @@ const verifyToken = require("../middlewares/Token");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const getUserIdFromToken = require("../utils/GetUserIdFromToken");
+const doesPostExists = require("../middlewares/Post");
+const doesLikeExist = require("../middlewares/Like");
 
-// for liking a post
-router.post("/", verifyToken, async (req, res) => {
+// added does post exist middleware because
+// we need to increment the likes count
+// for that we need to fetch post anyways
+// this will add more protection to the route
+router.post("/", verifyToken, doesPostExists, async (req, res) => {
     try {
         const { postId } = req.body;
         const cookies = req.cookies;
         const userId = getUserIdFromToken(cookies.token);
-
-        if (!postId) {
-            return res.status(400).json({ message: "Missing required fields" });
-        }
-        const response = await likePost(postId, userId);
+        const response = await likePost(postId, userId, req.post);
 
         res.status(201).json({
             message: "Like created",
@@ -27,23 +28,22 @@ router.post("/", verifyToken, async (req, res) => {
     }
 });
 
-// for deleting a like
-router.delete("/", verifyToken, async (req, res) => {
+// we need to check if the user who made the like
+// is disliking so we need to fetch the like first
+// and verify it. That's why we are using doesLikeExist
+// middleware
+router.delete("/", verifyToken, doesLikeExist, async (req, res) => {
     try {
-        const { likeId } = req.body;
+        const like = req.like;
+        const cookes = req.cookies;
+        const userIdFromToken = getUserIdFromToken(cookes.token);
 
-        const like = await Like.findById(likeId);
-
-        if (!like) {
-            return res.status(404).json({ message: "Like Not Found" });
+        if (like.userId.toString() !== userIdFromToken) {
+            return res.status(400).json({ message: "Bad Request" });
         }
 
-        if (!likeId) {
-            return res.status(400).json({ message: "Missing required fields" });
-        }
-
-        await Promise.all([
-            Like.findByIdAndDelete(likeId),
+        await Promise.allSettled([
+            like.deleteOne(),
             Post.findByIdAndUpdate(like.postId, { $inc: { likesCount: -1 } }),
         ]);
 
@@ -55,27 +55,23 @@ router.delete("/", verifyToken, async (req, res) => {
 
 module.exports = router;
 
-function likePost(postId, userId) {
+function likePost(postId, userId, post) {
     return new Promise(async (res, rej) => {
-        if (User.findById(userId) === null) {
-            rej("User not found");
+        try {
+            const like = new Like();
+            like.postId = postId;
+            like.userId = userId;
+            like.createdAt = new Date();
+            post.likesCount += 1;
+
+            const [likeResponse, postResponse] = await Promise.allSettled([
+                like.save(),
+                post.save(),
+            ]);
+
+            res(likeResponse.value);
+        } catch (error) {
+            rej(error.message);
         }
-
-        const post = await Post.findById(postId);
-
-        if (!post) {
-            rej("Post not found");
-        }
-
-        const like = new Like();
-        like.postId = postId;
-        like.userId = userId;
-        like.createdAt = new Date();
-        post.likesCount += 1;
-
-        const response = await like.save();
-        await post.save();
-
-        res(response);
     });
 }
