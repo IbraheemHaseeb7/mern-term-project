@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
 
-function verifyToken(req, res, next) {
+function authForPages(req, res, next) {
     const cookies = req.cookies;
 
     if (!cookies.token) {
-        return res.status(401).json({ message: "No token provided" });
+        return res.redirect("/login");
     }
 
     try {
@@ -22,8 +22,8 @@ function verifyToken(req, res, next) {
             }
         });
     } catch (error) {
-        return res.status(401).json({ message: "Invalid token" });
+        return res.redirect("/login");
     }
 }
 
-module.exports = verifyToken;
+module.exports = authForPages;

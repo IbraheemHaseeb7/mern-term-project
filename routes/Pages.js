@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const Post = require("../models/Post");
+const authForPages = require("../middlewares/AuthForPages");
+const { get20Posts } = require("./Post");
 
-router.get("/", async (req, res) => {
+router.get("/", authForPages, async (req, res) => {
     try {
-        const posts = await Post.find();
+        const posts = await get20Posts();
         res.render("index.ejs", { posts: posts, error: null });
     } catch (error) {
         res.render("index.ejs", { posts: [], error: error.message });

@@ -8,26 +8,37 @@
         <link href="styles/index.css" rel="stylesheet" />
         <link href="styles/general.css" rel="stylesheet" />
         <link href="styles/partials/home/Post.css" rel="stylesheet" />
+        <link href="styles/partials/home/CreatePost.css" rel="stylesheet" />
     </head>
     <body>
         <%- include('partials/Navbar') %>
-        <div class="posts-container">
-            <% posts.forEach((post) => { const date = new Date(post.timestamp);
-            const now = new Date(); const diffInSeconds = Math.floor((now -
-            date) / 1000); let timePassed; if (diffInSeconds < 60) { timePassed
-            = `${diffInSeconds} seconds`; } else if (diffInSeconds < 3600) {
-            const minutes = Math.floor(diffInSeconds / 60); timePassed =
-            `${minutes} minutes`; } else if (diffInSeconds < 86400) { const
-            hours = Math.floor(diffInSeconds / 3600); timePassed = `${hours}
-            hours`; } else { const days = Math.floor(diffInSeconds / 86400);
-            timePassed = `${days} days`; } %> <%- include('partials/home/Post',
-            { name: "Ibraheem", likesCount: post.likesCount, commentsCount:
-            post.commentsCount, description: post.description, timePassed:
-            timePassed }) %> <% }) %>
-        </div>
+        <section class="main-container">
+            <div class="left-container"></div>
+            <div class="centeral-container">
+                <%- include("partials/home/CreatePost"); %>
+                <div class="posts-container">
+                    <% ;posts.forEach((post) => { const date = new
+                    Date(post.timestamp); const now = new Date(); const
+                    diffInSeconds = Math.floor((now - date) / 1000); let
+                    timePassed; if (diffInSeconds < 60) { timePassed =
+                    `${diffInSeconds} seconds`; } else if (diffInSeconds < 3600)
+                    { const minutes = Math.floor(diffInSeconds / 60); timePassed
+                    = `${minutes} minutes`; } else if (diffInSeconds < 86400) {
+                    const hours = Math.floor(diffInSeconds / 3600); timePassed =
+                    `${hours} hours`; } else { const days =
+                    Math.floor(diffInSeconds / 86400); timePassed = `${days}
+                    days`; } %> <%- include('partials/home/Post', { name:
+                    post.userId.name, likesCount: post.likesCount,
+                    commentsCount: post.commentsCount, description:
+                    post.description, timePassed: timePassed }) %> <% }) %>
+                </div>
+            </div>
+            <div class="right-container"></div>
+        </section>
     </body>
     <script
         src="https://kit.fontawesome.com/6f1fefd577.js"
         crossorigin="anonymous"
     ></script>
+    <script src="scripts/index.js"></script>
 </html>

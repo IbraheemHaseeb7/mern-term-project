@@ -1,3 +1,38 @@
-h1 {
-    background-color: aqua;
+body {
+    width: 100%;
+    margin: 0;
+    background-color: #eee;
+}
+
+.main-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-container {
+    width: 25%;
+    height: 20rem;
+}
+
+.right-container {
+    width: 25%;
+    height: 20rem;
+}
+
+.centeral-container {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.posts-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
 }

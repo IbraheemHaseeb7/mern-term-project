@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 const verifyToken = require("../middlewares/Token");
+const getUserIdFromToken = require("../utils/GetUserIdFromToken");
 
 // for getting 20 Posts
 router.get("/", async (req, res) => {
@@ -28,11 +29,15 @@ router.get("/:id", async (req, res) => {
 // for creating a new Post
 router.post("/", verifyToken, async (req, res) => {
     try {
-        const body = req.body;
+        let body = req.body;
+        const cookies = req.cookies;
+        const userId = getUserIdFromToken(cookies.token);
 
-        if (!body.description || !body.userId || body.userId === "") {
+        if (!body.description) {
             return res.status(400).json({ message: "Invalid Request" });
         }
+
+        body.userId = userId;
 
         await writePost(body);
         res.status(201).json({ message: "Post created successfully" });
@@ -41,17 +46,19 @@ router.post("/", verifyToken, async (req, res) => {
     }
 });
 
-module.exports = router;
-
 async function get20Posts(lastId = null) {
     const LIMIT = 20;
 
     if (lastId) {
         return await Post.find({ _id: { $lt: lastId } })
             .sort({ timestamp: -1 })
+            .populate("userId")
             .limit(LIMIT);
     } else {
-        return await Post.find().sort({ timestamp: -1 }).limit(LIMIT);
+        return await Post.find()
+            .sort({ timestamp: -1 })
+            .populate("userId")
+            .limit(LIMIT);
     }
 }
 
@@ -85,3 +92,6 @@ async function writePost(post) {
         }
     });
 }
+
+module.exports = router;
+module.exports.get20Posts = get20Posts;

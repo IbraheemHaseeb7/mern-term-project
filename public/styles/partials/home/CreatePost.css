@@ -1,0 +1,29 @@
+.create-post-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.create-post-form > textarea {
+    width: calc(100% - 3rem);
+    border: none;
+    border-radius: 5px;
+    resize: none;
+    border: 1px solid white;
+    transition: all 0.2s ease;
+    height: 10rem;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+}
+
+.create-post-form > textarea:hover,
+.create-post-form > textarea:active,
+.create-post-form > textarea:focus {
+    border: 1px solid black;
+}
+
+.create-post-form > button {
+    width: calc(100% - 2rem);
+}
