@@ -1,27 +1,45 @@
 const description = document.getElementById("post-description");
 
-async function handleFormSubmit(e) {
+function handleFormSubmit(e) {
     e.preventDefault();
 
-    let value = description.value;
-
-    if (!value) {
+    if (!description.value) {
         return alert("Type something to create a post");
     }
 
-    await fetch("http://localhost:3000/api/posts", {
+    fetch("http://localhost:3000/api/posts", {
         method: "POST",
-        body: JSON.stringify({ description: value }),
+        body: JSON.stringify({ description: description.value }),
         headers: {
             "Content-Type": "application/json",
         },
     })
         .then((res) => res.json())
         .then((res) => {
-            value = "";
-            console.log(res);
+            description.value = "";
+            alert("Successfully made a new post");
         })
         .catch((error) => {
             alert(error.message);
         });
+}
+
+// like button
+const likeBtn = document.getElementById("like-btn");
+
+function handleLike(e) {
+    e.preventDefault();
+
+    const postId = likeBtn.getAttribute("data-post-id");
+
+    fetch("http://localhost:3000/api/likes", {
+        method: "POST",
+        body: JSON.stringify({ postId }),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then((res) => res.json())
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
 }

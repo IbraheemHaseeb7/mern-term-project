@@ -3,6 +3,7 @@ const router = express.Router();
 const Post = require("../models/Post");
 const verifyToken = require("../middlewares/Token");
 const getUserIdFromToken = require("../utils/GetUserIdFromToken");
+const { Types } = require("mongoose");
 
 // for getting 20 Posts
 router.get("/", async (req, res) => {
@@ -46,14 +47,79 @@ router.post("/", verifyToken, async (req, res) => {
     }
 });
 
-async function get20Posts(lastId = null) {
+async function get20Posts(userId, lastId = true) {
     const LIMIT = 20;
 
     if (lastId) {
-        return await Post.find({ _id: { $lt: lastId } })
-            .sort({ timestamp: -1 })
-            .populate("userId")
-            .limit(LIMIT);
+        return await Post.aggregate([
+            {
+                $lookup: {
+                    from: "likes",
+                    let: { postId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$postId", "$$postId"] },
+                                        {
+                                            $eq: [
+                                                "$userId",
+                                                new Types.ObjectId(userId),
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                    as: "likes",
+                },
+            },
+            {
+                $lookup: {
+                    from: "User",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user",
+                },
+            },
+            {
+                $unwind: "$user",
+            },
+            {
+                $addFields: {
+                    hasLiked: {
+                        $cond: {
+                            if: { $gt: [{ $size: "$likes" }, 0] },
+                            then: true,
+                            else: false,
+                        },
+                    },
+                },
+            },
+            {
+                $sort: { timestamp: -1 },
+            },
+            {
+                $limit: LIMIT,
+            },
+            {
+                $project: {
+                    _id: 1,
+                    description: 1,
+                    likesCount: 1,
+                    commentsCount: 1,
+                    timestamp: 1,
+                    hasLiked: 1,
+                    user: {
+                        _id: 1,
+                        name: 1,
+                        pictureUri: 1,
+                    },
+                },
+            },
+        ]);
     } else {
         return await Post.find()
             .sort({ timestamp: -1 })

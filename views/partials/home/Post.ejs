@@ -23,10 +23,10 @@
         </div>
         <div class="card__footer">
           <span class="card__footer__like">
-            <i class="far fa-heart"></i> <%= likesCount %>
+            <i onclick="handleLike(event)" data-post-id="<%= postId %>" id="like-btn" class="<%= hasLiked ? 'fa-solid' : 'fa-regular' %> fa-heart"></i> <%= likesCount %>
           </span>
           <span class="card__footer__comment">
-            <i class="far fa-comment"></i> <%= commentsCount %>
+            <i onclick="handleComment(event)" data-post-id="<%= postId %>" id="comment-btn" class="far fa-comment"></i> <%= commentsCount %>
           </span>
           <span class="card__footer__share">
             <i class="fas fa-share-alt"></i>

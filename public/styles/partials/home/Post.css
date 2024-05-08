@@ -82,3 +82,8 @@
     margin-right: 0.5em;
     color: #999;
 }
+
+#like-btn,
+#comment-btn {
+    cursor: pointer;
+}

@@ -19,12 +19,15 @@ router.post("/", verifyToken, doesPostExists, async (req, res) => {
         const userId = getUserIdFromToken(cookies.token);
         const response = await likePost(postId, userId, req.post);
 
+        console.log(response);
+
         res.status(201).json({
             message: "Like created",
             like: response._id.toString(),
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.log(error);
+        res.status(500).json({ message: error });
     }
 });
 
@@ -64,12 +67,10 @@ function likePost(postId, userId, post) {
             like.createdAt = new Date();
             post.likesCount += 1;
 
-            const [likeResponse, postResponse] = await Promise.allSettled([
-                like.save(),
-                post.save(),
-            ]);
+            const likeResponse = await like.save();
+            await post.save();
 
-            res(likeResponse.value);
+            res(likeResponse);
         } catch (error) {
             rej(error.message);
         }
