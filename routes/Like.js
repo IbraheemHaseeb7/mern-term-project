@@ -2,11 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Like = require("../models/Like");
 const verifyToken = require("../middlewares/Token");
-const User = require("../models/User");
 const Post = require("../models/Post");
 const getUserIdFromToken = require("../utils/GetUserIdFromToken");
 const doesPostExists = require("../middlewares/Post");
-const doesLikeExist = require("../middlewares/Like");
+const mongoose = require("mongoose");
 
 // added does post exist middleware because
 // we need to increment the likes count
@@ -19,39 +18,46 @@ router.post("/", verifyToken, doesPostExists, async (req, res) => {
         const userId = getUserIdFromToken(cookies.token);
         const response = await likePost(postId, userId, req.post);
 
-        console.log(response);
-
         res.status(201).json({
             message: "Like created",
             like: response._id.toString(),
         });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: error });
     }
 });
 
-// we need to check if the user who made the like
-// is disliking so we need to fetch the like first
-// and verify it. That's why we are using doesLikeExist
-// middleware
-router.delete("/", verifyToken, doesLikeExist, async (req, res) => {
+// creating a batch request using transaction
+// to maintain data entegerity
+router.delete("/", verifyToken, async (req, res) => {
+    const transaction = await mongoose.startSession();
+    transaction.startTransaction();
     try {
-        const like = req.like;
         const cookes = req.cookies;
         const userIdFromToken = getUserIdFromToken(cookes.token);
+        const { postId } = req.body;
+
+        const like = await Like.findOne({
+            userId: userIdFromToken,
+            postId: postId,
+        });
 
         if (like.userId.toString() !== userIdFromToken) {
             return res.status(400).json({ message: "Bad Request" });
         }
 
-        await Promise.allSettled([
-            like.deleteOne(),
-            Post.findByIdAndUpdate(like.postId, { $inc: { likesCount: -1 } }),
-        ]);
+        await like.deleteOne();
+        await Post.findByIdAndUpdate(postId, { $inc: { likesCount: -1 } });
+
+        await transaction.commitTransaction();
+        transaction.endSession();
 
         res.status(200).json({ message: "Like removed" });
     } catch (error) {
+        console.log(error);
+
+        transaction.abortTransaction();
+        transaction.endSession();
         res.status(500).json({ message: error.message });
     }
 });

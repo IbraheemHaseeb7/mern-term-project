@@ -1,0 +1,15 @@
+<div class="modal-container">
+    <div class="modal-centeral-container">
+        <div class="modal-post-container">
+            <%- include("./Post", { postId: post._id, name: "John", hasLiked: "true", likesCount: post.likesCount, commentsCount: post.commentsCount, description: post.description, timePassed: "2 sec" }) %>
+        </div>
+        <form class="modal-comment-form">
+            <textarea id="modal-comment-description" placeholder="Starting typing from here..."></textarea>
+            <button type="submit" data-post-id="123" onclick="handleCommentSubmit(event)">
+                Comment
+            </button>
+        </form>
+        <div class="comments-container"></div>
+    </div>
+    <div class="shadow"></div>
+</div>

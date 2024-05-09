@@ -83,7 +83,22 @@
     color: #999;
 }
 
-#like-btn,
-#comment-btn {
+.like-btn,
+.comment-btn {
     cursor: pointer;
+    display: flex !important;
+    gap: 5px;
+}
+
+.like-btn p,
+.comment-btn p {
+    margin: 0;
+}
+
+.like-btn:hover {
+    color: red;
+}
+
+.red-like {
+    color: red;
 }

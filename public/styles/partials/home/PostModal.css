@@ -1,0 +1,54 @@
+.modal-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.shadow {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.modal-centeral-container {
+    z-index: 5;
+}
+
+.modal-post-container {
+    width: 30rem;
+}
+
+.modal-comment-form {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    padding: 0 1rem;
+    align-items: center;
+}
+
+.modal-comment-form textarea {
+    width: 90%;
+    border-radius: 5px;
+    resize: none;
+    height: 1.75rem;
+    outline: none;
+    border: 1px solid white;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+.modal-comment-form textarea:hover {
+    border: 1px solid black;
+}

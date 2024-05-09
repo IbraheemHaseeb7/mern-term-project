@@ -17,10 +17,12 @@ router.get("/", async (req, res) => {
 });
 
 // for getting a single Post
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
     try {
-        const id = req.params.id;
-        const post = await getPostById(id);
+        const cookies = req.cookies;
+        const postId = req.params.id;
+        const userId = getUserIdFromToken(cookies.token);
+        const post = await getPostById(userId, postId);
         res.status(200).json(post);
     } catch (e) {
         res.status(500).json({ message: e.message });
@@ -128,15 +130,75 @@ async function get20Posts(userId, lastId = true) {
     }
 }
 
-function getPostById(id) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const post = await Post.findById(id);
-            resolve(post);
-        } catch (e) {
-            reject(e);
-        }
-    });
+async function getPostById(userId, postId) {
+    return await Post.aggregate([
+        {
+            $match: {
+                _id: new Types.ObjectId(postId),
+            },
+        },
+        {
+            $lookup: {
+                from: "likes",
+                let: { postId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$postId", "$$postId"] },
+                                    {
+                                        $eq: [
+                                            "$userId",
+                                            new Types.ObjectId(userId),
+                                        ],
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                ],
+                as: "likes",
+            },
+        },
+        {
+            $lookup: {
+                from: "User",
+                localField: "userId",
+                foreignField: "_id",
+                as: "user",
+            },
+        },
+        {
+            $unwind: "$user",
+        },
+        {
+            $addFields: {
+                hasLiked: {
+                    $cond: {
+                        if: { $gt: [{ $size: "$likes" }, 0] },
+                        then: true,
+                        else: false,
+                    },
+                },
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                description: 1,
+                likesCount: 1,
+                commentsCount: 1,
+                timestamp: 1,
+                hasLiked: 1,
+                user: {
+                    _id: 1,
+                    name: 1,
+                    pictureUri: 1,
+                },
+            },
+        },
+    ]);
 }
 
 async function writePost(post) {
