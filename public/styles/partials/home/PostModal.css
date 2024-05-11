@@ -25,6 +25,27 @@
 
 .modal-centeral-container {
     z-index: 5;
+    overflow-y: scroll;
+    height: 100vh;
+}
+.modal-centeral-container::-webkit-scrollbar {
+    width: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+.modal-centeral-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+}
+
+.modal-centeral-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.modal-centeral-container::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-radius: 5px;
 }
 
 .modal-post-container {

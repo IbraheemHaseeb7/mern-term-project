@@ -6,6 +6,7 @@ const Post = require("../models/Post");
 const getUserIdFromToken = require("../utils/GetUserIdFromToken");
 const doesCommentExist = require("../middlewares/Comments");
 const doesPostExists = require("../middlewares/Post");
+const { Types } = require("mongoose");
 
 // added post middleware because
 // we need to increment the comments count
@@ -65,6 +66,55 @@ router.delete("/", verifyToken, doesCommentExist, async (req, res) => {
             .json({ message: "Comment deleted successfully" });
     } catch (e) {
         return res.status(500).json({ message: e.message });
+    }
+});
+
+router.get("/", verifyToken, async (req, res) => {
+    try {
+        const { postId } = req.query;
+
+        if (!postId) {
+            return res.status(400).json({ message: "Post ID not provided" });
+        }
+
+        const comments = await Comment.aggregate([
+            {
+                $match: {
+                    postId: new Types.ObjectId(postId),
+                },
+            },
+            {
+                $lookup: {
+                    from: "User",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user",
+                },
+            },
+            {
+                $unwind: "$user",
+            },
+            {
+                $sort: { createdAt: -1 },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    postId: 1,
+                    createdAt: 1,
+                    description: 1,
+                    user: {
+                        _id: 1,
+                        name: 1,
+                        pictureUri: 1,
+                    },
+                },
+            },
+        ]);
+
+        res.status(200).json(comments);
+    } catch (error) {
+        res.status(500).json({ message: error.toString() });
     }
 });
 

@@ -8,12 +8,14 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    margin-top: 6rem;
 }
 
 .left-container {
     width: 25%;
     height: 20rem;
+    position: relative;
 }
 
 .right-container {

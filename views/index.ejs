@@ -10,6 +10,8 @@
         <link href="styles/partials/home/Post.css" rel="stylesheet" />
         <link href="styles/partials/home/CreatePost.css" rel="stylesheet" />
         <link href="styles/partials/home/PostModal.css" rel="stylesheet" />
+        <link href="styles/Nav.css" rel="stylesheet" />
+        <link href="styles/LeftBar.css" rel="stylesheet" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -21,7 +23,7 @@
     <body>
         <%- include('partials/Navbar') %>
         <section class="main-container">
-            <div class="left-container"></div>
+            <div class="left-container"><%- include('partials/LeftBar') %></div>
             <div class="centeral-container">
                 <%- include("partials/home/CreatePost"); %>
                 <div class="posts-container">
@@ -39,7 +41,8 @@
                     post._id ,name: post.user.name, hasLiked: post.hasLiked,
                     likesCount: post.likesCount, commentsCount:
                     post.commentsCount, description: post.description,
-                    timePassed: timePassed }) %> <% }) %>
+                    timePassed: timePassed, pictureUri: post.user.pictureUri })
+                    %> <% }) %>
                 </div>
             </div>
             <div class="right-container"></div>

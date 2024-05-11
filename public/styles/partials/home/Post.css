@@ -102,3 +102,12 @@
 .red-like {
     color: red;
 }
+
+.comment-img {
+    width: 3em;
+    height: 3em;
+}
+
+.comment-description {
+    font-size: 1.25rem;
+}

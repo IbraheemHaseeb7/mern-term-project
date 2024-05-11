@@ -25,6 +25,7 @@ router.post("/token/login", async (req, res) => {
         const token = jwt.sign({ user: user.id }, process.env.SECRET_KEY);
 
         res.cookie("token", token, { httpOnly: true });
+        req.session.user = user;
         return res.status(200).json({ message: "Successfully logged in" });
     } catch (e) {
         return res.status(500).json({ message: e.message });
@@ -51,6 +52,12 @@ router.post("/token/signup", async (req, res) => {
     } catch (e) {
         return res.status(500).json({ message: e.message });
     }
+});
+
+router.post("/token/logout", async (req, res) => {
+    res.clearCookie("token");
+    req.session.user = null;
+    return res.redirect("/login");
 });
 
 module.exports = router;

@@ -17,7 +17,7 @@ function authForPages(req, res, next) {
                     });
                 }
             } else {
-                req.user = decoded;
+                req.userId = decoded;
                 next();
             }
         });
