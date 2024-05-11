@@ -201,6 +201,92 @@ async function getPostById(userId, postId) {
     ]);
 }
 
+async function get20PostsById(userId, lastId = true) {
+    const LIMIT = 20;
+
+    if (lastId) {
+        return await Post.aggregate([
+            {
+                $match: {
+                    userId: new Types.ObjectId(userId),
+                },
+            },
+            {
+                $lookup: {
+                    from: "likes",
+                    let: { postId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$postId", "$$postId"] },
+                                        {
+                                            $eq: [
+                                                "$userId",
+                                                new Types.ObjectId(userId),
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                    as: "likes",
+                },
+            },
+            {
+                $lookup: {
+                    from: "User",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user",
+                },
+            },
+            {
+                $unwind: "$user",
+            },
+            {
+                $addFields: {
+                    hasLiked: {
+                        $cond: {
+                            if: { $gt: [{ $size: "$likes" }, 0] },
+                            then: true,
+                            else: false,
+                        },
+                    },
+                },
+            },
+            {
+                $sort: { timestamp: -1 },
+            },
+            {
+                $limit: LIMIT,
+            },
+            {
+                $project: {
+                    _id: 1,
+                    description: 1,
+                    likesCount: 1,
+                    commentsCount: 1,
+                    timestamp: 1,
+                    hasLiked: 1,
+                    user: {
+                        _id: 1,
+                        name: 1,
+                        pictureUri: 1,
+                    },
+                },
+            },
+        ]);
+    } else {
+        return await Post.find()
+            .sort({ timestamp: -1 })
+            .populate("userId")
+            .limit(LIMIT);
+    }
+}
+
 async function writePost(post) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -223,3 +309,4 @@ async function writePost(post) {
 
 module.exports = router;
 module.exports.get20Posts = get20Posts;
+module.exports.get20PostsById = get20PostsById;

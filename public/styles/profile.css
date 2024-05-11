@@ -1,0 +1,8 @@
+.profile-main-container {
+    width: 73%;
+    min-height: calc(100vh - 6rem);
+
+    position: absolute;
+    top: 6rem;
+    right: 5px;
+}

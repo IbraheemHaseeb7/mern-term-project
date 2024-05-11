@@ -1,30 +1,32 @@
 <div class="left-bar-container">
     <div class="profile-container">
-        <img src="<%= user.pictureUri %>" />
         <p><%= user.name%></p>
+        <img src="<%= user.pictureUri %>" />
     </div>
-    <button onclick="handleLogout(event)">
-        <p>Home</p>
+    <button onclick="handleHome(event)">
         <i class="fa-solid fa-house"></i>
+        <p>Home</p>
     </button>
-    <button onclick="handleLogout(event)">
-        <p>Profile</p>
+    <button data-user-id="<%= user._id %>" onclick="handleProfile(event)">
         <i class="fa-solid fa-user"></i>
+        <p>Profile</p>
     </button>
     <button onclick="handleLogout(event)">
-        <p>Chats</p>
         <i class="fa-solid fa-comment"></i>
+        <p>Chats</p>
     </button>
     <button onclick="handleLogout(event)">
-        <p>Network</p>
         <i class="fa-solid fa-globe"></i>
+        <p>Network</p>
     </button>
     <button onclick="handleLogout(event)">
-        <p>Settings</p>
         <i class="fa-solid fa-gear"></i>
+        <p>Settings</p>
     </button>
     <button onclick="handleLogout(event)">
-        <p>Logout</p>
         <i class="fa-solid fa-person-running"></i>
+        <p>Logout</p>
     </button>
 </div>
+
+<script src="/scripts/partials/LeftBar.js"></script>

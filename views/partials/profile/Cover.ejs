@@ -1,0 +1,24 @@
+<link href="/styles/partials/profile/Cover.css" rel="stylesheet" />
+
+<div class="pictures-container">
+    <img class="cover-picture" src="<%= user.coverUri %>" alt="cover" />
+    <img class="profile-picture" src="<%= user.pictureUri %>" alt="profile" />
+    <h3 class="user-name"><%= user.name %></h3>
+    <% const date = new Date(user.joiningDate); const now = new Date(); const
+    diffInSeconds = Math.floor((now - date) / 1000); let timePassed; if
+    (diffInSeconds < 60) { timePassed = `${diffInSeconds} seconds`; } else if
+    (diffInSeconds < 3600) { const minutes = Math.floor(diffInSeconds / 60);
+    timePassed = `${minutes} minutes`; } else if (diffInSeconds < 86400) { const
+    hours = Math.floor(diffInSeconds / 3600); timePassed = `${hours} hours`; }
+    else { const days = Math.floor(diffInSeconds / 86400); timePassed = `${days}
+    days`; } %>
+    <p class="member-since">Member Since: <b><%= timePassed %></b></p>
+    <div class="bio-container">
+        <p>Bio:</p>
+        <p class="bio"><%= user.bio %></p>
+    </div>
+    <div class="edit-share-buttons-container">
+        <button><i class="fa-solid fa-pen"></i></button>
+        <button><i class="fa-solid fa-share"></i></button>
+    </div>
+</div>

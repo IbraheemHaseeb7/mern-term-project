@@ -1,35 +1,42 @@
-/* Navbar container */
-.navbar {
-    background-color: #f8f8f8;
-    padding: 10px;
-}
-
-/* Navbar logo */
-.navbar .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-}
-
-/* Navbar links */
-.navbar .nav-links {
-    list-style: none;
-    display: flex;
-    justify-content: flex-end;
+nav {
+    height: 5rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    justify-items: center;
     align-items: center;
+    position: fixed;
+    top: 0;
+    background-color: white;
+    z-index: 10;
 }
 
-.navbar .nav-links li {
-    margin-left: 10px;
+nav > form {
+    justify-self: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.navbar .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
+nav > form > input {
+    font-size: 1.3rem;
 }
 
-/* Active link */
-.navbar .nav-links a.active {
-    color: #ff0000;
+nav > form > button {
+    width: 5rem;
+}
+
+nav > div {
+    height: 5rem;
+    cursor: pointer;
+}
+
+nav > div > a > img {
+    height: 100%;
 }

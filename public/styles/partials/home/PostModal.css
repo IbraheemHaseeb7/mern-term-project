@@ -9,6 +9,7 @@
     top: 0;
     left: 0;
     pointer-events: none;
+    z-index: 100;
 }
 
 .shadow {
@@ -20,11 +21,11 @@
     top: 0;
     left: 0;
     cursor: pointer;
-    z-index: 2;
+    z-index: 90;
 }
 
 .modal-centeral-container {
-    z-index: 5;
+    z-index: 100;
     overflow-y: scroll;
     height: 100vh;
 }

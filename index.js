@@ -16,7 +16,7 @@ const commentRoutes = require("./routes/Comment");
 const passValuesToViews = require("./middlewares/passValuesToViews");
 
 // Setting middlewares and view engine
-app.use(express.static("public"));
+app.use(express.static(__dirname + "\\public"));
 app.set("view engine", "ejs");
 app.use(ejsLayouts);
 app.use(express.json());

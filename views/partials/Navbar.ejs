@@ -1,9 +1,15 @@
+<% if (user) { %>
 <nav>
     <div>
-        <img src="assets/general/bg.png" alt="Logo" />
+        <a href="/">
+            <img src="/assets/general/bg.png" alt="Logo" />
+        </a>
     </div>
     <form action="https://google.com/search">
         <input name="q" type="search" class="search" placeholder="Search" />
         <button type="submit">Search</button>
     </form>
 </nav>
+
+<div class="left-container"><%- include('LeftBar') %></div>
+<% } else { %> <%#- include('../redirect', { url: "/login" }) %> <% } %>

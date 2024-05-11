@@ -2,6 +2,17 @@
     font-family: "Calibri", "Trebuchet MS", sans-serif;
 }
 
+:root {
+    --main-theme: #1990ff;
+    --main-theme-hovered: #0080ff;
+}
+
+body {
+    width: 100%;
+    margin: 0;
+    background-color: #eee;
+}
+
 input {
     width: 100%;
     padding: 0.5rem 0.75rem;
@@ -17,7 +28,7 @@ input:active {
 }
 
 button {
-    background-color: #1990ff;
+    background-color: var(--main-theme);
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -28,5 +39,5 @@ button {
 }
 
 button:hover {
-    background-color: #0080ff;
+    background-color: var(--main-theme-hovered);
 }
