@@ -102,17 +102,6 @@ function handleChangeCover(e) {
 
     fileInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
-
-        const fileReader = new FileReader();
-
-        fileReader.onload = function (e) {
-            const fileData = e.target.result;
-            const blob = new Blob([fileData], { type: file.type });
-
-            console.log(blob);
-        };
-
-        fileReader.readAsArrayBuffer(file);
     });
 }
 
