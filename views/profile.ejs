@@ -1,6 +1,11 @@
+<link href="/styles/partials/profile/EditModal.css" rel="stylesheet" />
+<link href="/styles/profile.css" rel="stylesheet" />
+
 <div class="profile-main-container">
-    <%- include('partials/profile/Cover') %> <%-
+    <%- include('partials/profile/Cover', { currentUser: currentUser }) %> <%-
     include('partials/profile/Posts') %>
+
+    <div class="profile-edit-container"></div>
 </div>
 
-<link href="/styles/profile.css" rel="stylesheet" />
+<script src="/scripts/partials/profile/EditModal.js"></script>

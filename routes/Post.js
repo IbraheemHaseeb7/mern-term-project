@@ -201,8 +201,12 @@ async function getPostById(userId, postId) {
     ]);
 }
 
-async function get20PostsById(userId, lastId = true) {
+async function get20PostsById(userId, likesUserId = null, lastId = true) {
     const LIMIT = 20;
+
+    if (!likesUserId) {
+        likesUserId = userId;
+    }
 
     if (lastId) {
         return await Post.aggregate([
@@ -224,7 +228,7 @@ async function get20PostsById(userId, lastId = true) {
                                         {
                                             $eq: [
                                                 "$userId",
-                                                new Types.ObjectId(userId),
+                                                new Types.ObjectId(likesUserId),
                                             ],
                                         },
                                     ],

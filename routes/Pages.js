@@ -3,6 +3,7 @@ const router = express.Router();
 const authForPages = require("../middlewares/AuthForPages");
 const { get20Posts, get20PostsById } = require("./Post");
 const getUserIdFromToken = require("../utils/GetUserIdFromToken");
+const User = require("../models/User");
 
 router.get("/", authForPages, async (req, res) => {
     try {
@@ -30,18 +31,25 @@ router.get("/signup", (req, res) => {
 router.get("/profile/:userId", async (req, res) => {
     const { userId } = req.params;
 
-    if (userId === "1") {
-        return res.render("error.ejs", { message: "User not found" });
-    }
-
     try {
-        const posts = await get20PostsById(userId);
+        if (userId === req.session.user?._id) {
+            const posts = await get20PostsById(userId);
 
-        res.render("profile.ejs", {
-            title: "Welcome Back",
-            userId: userId,
-            posts: posts,
-        });
+            res.render("profile.ejs", {
+                title: "Welcome Back",
+                currentUser: req.session.user,
+                posts: posts,
+            });
+        } else {
+            const user = await User.findById(userId);
+            const posts = await get20PostsById(userId, req.session.user?._id);
+
+            res.render("profile.ejs", {
+                title: user.name,
+                currentUser: user,
+                posts: posts,
+            });
+        }
     } catch (error) {
         res.status(500).json({ message: error.toString() });
     }
