@@ -15,7 +15,57 @@ function handleFormSubmit(e) {
     })
         .then((res) => res.json())
         .then((res) => {
+            const userName = document.querySelector(
+                ".left-bar-container .profile-container p"
+            ).innerHTML;
+            const profileImage = document
+                .querySelector(".left-bar-container .profile-container img")
+                .getAttribute("src");
+            const postsContainer = document.querySelector(".posts-container");
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("wrapper");
+
+            let postContent = `
+                    <ul class="cards__list">
+                        <li class="card">
+                            <div class="card__header">
+                                <img class="card__profile-img" src="${profileImage}" alt="c3po"/>
+                                <div class="card__meta">
+                                <div class="card__meta__displayname">
+                                    ${userName}
+                                </div>
+                                <div class="card__meta__username">
+                                </div>
+                                <div class="card__meta__timestamp">
+                                    2 seconds
+                                </div>
+                                </div>
+                                <div class="card__menu">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </div>
+                            </div>
+                            <div class="card__body">
+                                ${description.value}
+                            </div>
+                            <div class="card__footer">
+                            <span class="card__footer__like">
+                                <i onclick="handleLike(event)" data-post-id="${res._id}" data-has-liked="false" class="fa-regular fa-heart like-btn">
+                                <p>0</p></i> 
+                            </span>
+                            <span class="card__footer__comment">
+                                <i onclick="handleComment(event)" data-post-id="${res._id}" class="far fa-comment comment-btn"><p>0</p></i>
+                            </span>
+                            <span class="card__footer__share">
+                                <i class="fas fa-share-alt"></i>
+                            </div>
+                        </li>
+                    </ul>
+            `;
+
+            wrapper.innerHTML = postContent;
+            postsContainer.insertBefore(wrapper, postsContainer.firstChild);
             description.value = "";
+
             alert("Successfully made a new post");
         })
         .catch((error) => {
@@ -48,7 +98,7 @@ function handleComment(e) {
     e.preventDefault();
 
     const postId = e.target.getAttribute("data-post-id");
-    openModal(postId);
+    openPostModal(postId);
 }
 
 function likePost(postId, e) {
@@ -107,6 +157,9 @@ function handleCommentSubmit(e) {
     const commentsNumbersElements = document.querySelectorAll(
         `.card__footer__comment [data-post-id="${postId}"] p`
     );
+    const profileImage = document
+        .querySelector(".left-bar-container .profile-container img")
+        .getAttribute("src");
 
     fetch("http://localhost:3000/api/comments", {
         method: "POST",
@@ -130,7 +183,7 @@ function handleCommentSubmit(e) {
                             <ul class="cards__list">
                                 <li class="card">
                                     <div class="card__header">
-                                        <img class="card__profile-img comment-img" src="https://www.syfy.com/sites/syfy/files/styles/1200x680/public/syfywire_cover_media/2018/09/c-3po-see-threepio_68fe125c.jpg" alt="c3po"/>
+                                        <img class="card__profile-img comment-img" src="${profileImage}" alt="c3po"/>
                                         <div class="card__meta">
                                             <div class="card__meta__displayname">
                                                 John
@@ -167,7 +220,7 @@ function handleCommentSubmit(e) {
         });
 }
 
-async function openModal(postId) {
+async function openPostModal(postId) {
     const modalContainer = document.querySelector(".modal-container");
     await fetch(`http://localhost:3000/api/posts/${postId}`, {
         method: "GET",
@@ -251,7 +304,7 @@ async function openModal(postId) {
                         
                     </div>
                 </div>
-                <div class="shadow" onclick="closeModal(event)"></div>
+                <div class="shadow" onclick="closePostModal(event)"></div>
             `;
 
             modalContainer.innerHTML = modalContent;
@@ -323,7 +376,7 @@ async function openModal(postId) {
         .catch((error) => {});
 }
 
-function closeModal() {
+function closePostModal() {
     const modalContainer = document.querySelector(".modal-container");
     modalContainer.removeAttribute("style");
     modalContainer.innerHTML = "";

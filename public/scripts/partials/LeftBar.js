@@ -21,3 +21,8 @@ function handleHome(e) {
     e.preventDefault();
     window.location.href = "/";
 }
+
+function handleNetwork(e) {
+    e.preventDefault();
+    window.location.href = "/network";
+}

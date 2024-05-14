@@ -11,13 +11,14 @@ const options = [
     "Luna",
     "Samantha",
     "Shadow",
-    "Miss kitty",
+    "Cuddles",
     "Boots",
     "Scooter",
     "Rocky",
     "Bear",
     "Peanut",
     "Sadie",
+    "Leo",
 ];
 
 function handleEditClick(e) {
@@ -70,7 +71,7 @@ async function openModal(userId) {
                                 <label for="edit-bio">Bio</label>
                                 <textarea type="text" name="bio" id="edit-bio">${user.bio}</textarea>
                             </div>
-                            <button onclick="" type="button">
+                            <button data-user-id="${user._id}" data-cover="${user.coverUri}" onclick="handleSubmitEditForm(event)" type="button">
                                 Save Changes
                             </button>
                         </form>
@@ -93,6 +94,7 @@ function handleSelectOption(e) {
     pictureDisplay.setAttribute("src", imgLink);
 }
 
+let selectedCoverFile;
 function handleChangeCover(e) {
     e.preventDefault();
 
@@ -102,6 +104,13 @@ function handleChangeCover(e) {
 
     fileInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
+        selectedCoverFile = file;
+        const url = URL.createObjectURL(file);
+
+        const coverImageDisplay = document.querySelector(
+            ".edit-container .picture-edit .cover-display img"
+        );
+        coverImageDisplay.setAttribute("src", url);
     });
 }
 
@@ -111,4 +120,57 @@ function closeModal() {
     );
     profileEditContainer.removeAttribute("style");
     profileEditContainer.innerHTML = "";
+}
+
+async function handleSubmitEditForm(e) {
+    e.preventDefault();
+
+    const pictureUri = document
+        .querySelector(".edit-container .picture-edit .picture-display img")
+        .getAttribute("src");
+    const coverUri = document
+        .querySelector(".edit-container .picture-edit .cover-display img")
+        .getAttribute("src");
+    const name = document.getElementById("edit-name").value;
+    const email = document.getElementById("edit-email").value;
+    const bio = document.getElementById("edit-bio").value;
+    const originalCoverUri = e.target.getAttribute("data-cover");
+    const userId = e.target.getAttribute("data-user-id");
+
+    const data = { pictureUri, coverUri, name, email, bio };
+
+    if (coverUri !== originalCoverUri) {
+        await fetch(`http://localhost:3000/api/upload?userId=${userId}`)
+            .then((res) => res.json())
+            .then(async (uploadParams) => {
+                const formData = new FormData();
+                formData.append("file", selectedCoverFile);
+                formData.append("api_key", uploadParams.api_key);
+                formData.append("timestamp", uploadParams.timestamp);
+                formData.append("signature", uploadParams.signature);
+                formData.append("folder", uploadParams.folder);
+
+                await fetch(
+                    `https://api.cloudinary.com/v1_1/${uploadParams.cloud_name}/upload`,
+                    { method: "POST", body: formData }
+                )
+                    .then((res) => res.json())
+                    .then((res) => {
+                        data.coverUri = res.url;
+                    })
+                    .catch((err) => alert("Could not upload cover picture..."));
+            })
+            .catch((err) => alert("Could not upload cover picture..."));
+    }
+
+    await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then((res) => res.json())
+        .then((res) => closeModal())
+        .catch((err) => alert("Could not update user data..."));
 }

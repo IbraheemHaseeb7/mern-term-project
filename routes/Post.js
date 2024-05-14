@@ -42,8 +42,8 @@ router.post("/", verifyToken, async (req, res) => {
 
         body.userId = userId;
 
-        await writePost(body);
-        res.status(201).json({ message: "Post created successfully" });
+        const post = await writePost(body);
+        res.status(201).json(post);
     } catch (e) {
         res.status(500).json({ message: e.message });
     }

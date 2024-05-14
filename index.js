@@ -1,8 +1,10 @@
 const express = require("express");
 const { connectDB } = require("./config/database");
+const connectToCloud = require("./config/cloud");
 const cookieParser = require("cookie-parser");
 const ejsLayouts = require("express-ejs-layouts");
 const session = require("express-session");
+const passValuesToViews = require("./middlewares/passValuesToViews");
 const app = express();
 const PORT = 3000;
 
@@ -12,8 +14,9 @@ const authRoutes = require("./routes/Auth");
 const postRoutes = require("./routes/Post");
 const pageRoutes = require("./routes/Pages");
 const likeRoutes = require("./routes/Like");
+const uploadRoutes = require("./routes/Upload");
 const commentRoutes = require("./routes/Comment");
-const passValuesToViews = require("./middlewares/passValuesToViews");
+const friendRequest = require("./routes/FriendRequest");
 
 // Setting middlewares and view engine
 app.use(express.static(__dirname + "\\public"));
@@ -37,9 +40,12 @@ app.use("/api", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/likes", likeRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/friendRequests", friendRequest);
 app.use("/", pageRoutes);
 
 app.listen(process.env.PORT || PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     connectDB();
+    connectToCloud();
 });
