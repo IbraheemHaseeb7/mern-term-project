@@ -16,5 +16,6 @@
             referrerpolicy="no-referrer"
         />
     </head>
-    <%- body %> <%- include('partials/Navbar') %>
+    <% if (layout) { %> <%- include('partials/Navbar') %> <%}%> <%- body %>
+    <script src="/scripts/general.js"></script>
 </html>

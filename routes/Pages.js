@@ -6,11 +6,16 @@ const getUserIdFromToken = require("../utils/GetUserIdFromToken");
 const User = require("../models/User");
 
 router.get("/", authForPages, async (req, res) => {
+    res.locals.layout = true;
     try {
         const cookies = req.cookies;
         const userId = getUserIdFromToken(cookies.token);
         const posts = await get20Posts(userId);
-        res.render("index.ejs", { title: "Home", posts: posts, error: null });
+        res.render("index.ejs", {
+            title: "Home",
+            posts: posts,
+            error: null,
+        });
     } catch (error) {
         res.render("index.ejs", {
             title: "Home",
@@ -21,15 +26,18 @@ router.get("/", authForPages, async (req, res) => {
 });
 
 router.get("/login", (req, res) => {
+    res.locals.layout = false;
     res.render("auth.ejs", { title: "Login" });
 });
 
 router.get("/signup", (req, res) => {
+    res.locals.layout = false;
     res.render("auth.ejs", { title: "Sign Up" });
 });
 
 router.get("/profile/:userId", async (req, res) => {
     const { userId } = req.params;
+    res.locals.layout = true;
 
     try {
         if (userId === req.session.user?._id) {
@@ -56,6 +64,7 @@ router.get("/profile/:userId", async (req, res) => {
 });
 
 router.get("/network", (req, res) => {
+    res.locals.layout = true;
     res.render("network.ejs");
 });
 

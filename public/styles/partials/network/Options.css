@@ -1,0 +1,27 @@
+.network-options-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.network-options-container > button {
+    background-color: #d6d6d6;
+    color: #000000;
+    margin: 0;
+    border-radius: 0;
+}
+
+.network-options-container > button:first-child {
+    border-radius: 5px 0 0 5px;
+}
+
+.network-options-container > button:last-child {
+    border-radius: 0 5px 5px 0;
+}
+
+.network-options-container > button:hover,
+.network-options-container > button:active,
+.network-options-container > button:focus {
+    background-color: #b4b4b4;
+}

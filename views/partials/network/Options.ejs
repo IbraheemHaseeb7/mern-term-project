@@ -1,0 +1,25 @@
+<link href="/styles/partials/network/Options.css" rel="stylesheet" />
+
+<div class="network-options-container">
+    <button
+        data-user-id="<%= user._id%>"
+        data-title="Friends"
+        onclick="handleOption(event)"
+    >
+        Friends
+    </button>
+    <button
+        data-user-id="<%= user._id%>"
+        data-title="Received"
+        onclick="handleOption(event)"
+    >
+        Received
+    </button>
+    <button
+        data-user-id="<%= user._id%>"
+        data-title="Sent"
+        onclick="handleOption(event)"
+    >
+        Sent
+    </button>
+</div>

@@ -11,12 +11,6 @@ const userSchema = new Schema(
         password: String,
         joiningDate: Date,
         friendsCount: Number,
-        friends: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "User",
-            },
-        ],
         bio: String,
         pictureUri: String,
         coverUri: String,

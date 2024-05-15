@@ -16,6 +16,7 @@ const pageRoutes = require("./routes/Pages");
 const likeRoutes = require("./routes/Like");
 const uploadRoutes = require("./routes/Upload");
 const commentRoutes = require("./routes/Comment");
+const friendsRoutes = require("./routes/Friends");
 const friendRequest = require("./routes/FriendRequest");
 
 // Setting middlewares and view engine
@@ -42,6 +43,7 @@ app.use("/api/likes", likeRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/friendRequests", friendRequest);
+app.use("/api/friends", friendsRoutes);
 app.use("/", pageRoutes);
 
 app.listen(process.env.PORT || PORT, () => {
