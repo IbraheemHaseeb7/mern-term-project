@@ -11,6 +11,8 @@ body {
     width: 100%;
     margin: 0;
     background-color: #eee;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 input {

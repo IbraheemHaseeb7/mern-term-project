@@ -10,7 +10,7 @@ router.get("/", authForPages, async (req, res) => {
     try {
         const cookies = req.cookies;
         const userId = getUserIdFromToken(cookies.token);
-        const posts = await get20Posts(userId);
+        const posts = await get20PostsById(null, userId, 5);
         res.render("index.ejs", {
             title: "Home",
             posts: posts,
