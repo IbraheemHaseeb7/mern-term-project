@@ -48,6 +48,13 @@
     color: rgba(0, 0, 0, 0.315);
 }
 
+.pictures-container > .friends-count {
+    position: absolute;
+    top: calc(100% + 6rem);
+    left: 13rem;
+    color: rgba(0, 0, 0, 0.315);
+}
+
 .edit-share-buttons-container {
     position: absolute;
     top: calc(100% + 0rem);

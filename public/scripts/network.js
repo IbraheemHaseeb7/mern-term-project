@@ -29,7 +29,7 @@ function fetchData(title, userId) {
                     const friendTimePassed = getTimeValue(friendDate);
                     const dataTimePassed = getTimeValue(dataDate);
                     dataContent += `
-                            <div class="data-row">
+                            <div class="data-row" style="grid-template-columns: 5rem calc(100% - 15rem) 5rem 5rem;">
                                 <img class="profile-image" src="${
                                     data.user1._id === userId
                                         ? data.user2.pictureUri
@@ -46,11 +46,11 @@ function fetchData(title, userId) {
                     }</h3>
                                 <span class="member-since"> Member Since: ${friendTimePassed}</span>
                                 <p class="time-passed">${dataTimePassed}</p>
-                                <button data-from-id="${
-                                    data.user1._id === userId
-                                        ? data.user2._id
-                                        : data.user1._id
-                                }" onclick="handleUnfriend(event)"><i class="fa-solid fa-xmark"></i></button>
+                                <button data-to-id="${
+                                    data.user1._id
+                                }" data-from-id="${
+                        data.user2._id
+                    }" onclick="handleUnfriend(event)"><i class="fa-solid fa-xmark"></i></button>
                             </div>
                         `;
                 });
@@ -58,7 +58,6 @@ function fetchData(title, userId) {
                 dataContainer.innerHTML = dataContent;
             })
             .catch((e) => {
-                console.log(e);
                 alert("Could not fetch records!");
             });
     } else {
@@ -79,7 +78,11 @@ function fetchData(title, userId) {
                     const dataTimePassed = getTimeValue(dataDate);
 
                     dataContent += `
-                        <div class="data-row">
+                        <div class="data-row" ${
+                            title === "sent"
+                                ? `style="grid-template-columns: 5rem calc(100% - 15rem) 5rem 5rem;"`
+                                : `style="grid-template-columns: 5rem calc(100% - 20rem) 5rem 5rem 5rem;"`
+                        }>
                             <img class="profile-image" src="${
                                 title === "sent"
                                     ? data.to.pictureUri
@@ -97,7 +100,8 @@ function fetchData(title, userId) {
                             ${
                                 title === "sent"
                                     ? `<button data-from-id="${data.from._id}" data-to-id="${data.to._id}" onclick="handleCancelRequest(event)"><i class="fa-solid fa-xmark"></i></button>`
-                                    : `<button data-from-id="${data.from._id}" data-to-id="${data.to._id}" onclick="handleAcceptRequest(event)"><i class="fa-solid fa-check"></i></button>`
+                                    : `<button data-accept="true" data-from-id="${data.from._id}" data-to-id="${data.to._id}" onclick="handleAcceptRequest(event)"><i class="fa-solid fa-check"></i></button>
+                                    <button data-reject="true" data-from-id="${data.from._id}" data-to-id="${data.to._id}" onclick="handleRejectRequest(event)"><i class="fa-solid fa-xmark"></i></button>`
                             }
                         </div>
                     `;
@@ -152,5 +156,51 @@ function handleAcceptRequest(e) {
         })
         .catch((err) => {
             alert("Could not accept request!");
+        });
+}
+
+function handleRejectRequest(e) {
+    e.preventDefault();
+
+    const fromId = e.target.getAttribute("data-from-id");
+    const toId = e.target.getAttribute("data-to-id");
+
+    fetch("/api/friendRequests", {
+        method: "DELETE",
+        body: JSON.stringify({ from: fromId, to: toId }),
+        headers: { "Content-Type": "application/json" },
+    })
+        .then((res) => {
+            if (res.status === 202) {
+                e.target.parentElement.remove();
+            } else {
+                throw new Error("Could not reject request!");
+            }
+        })
+        .catch((err) => {
+            alert("Could not reject request!");
+        });
+}
+
+function handleUnfriend(e) {
+    e.preventDefault();
+
+    const fromId = e.target.getAttribute("data-from-id");
+    const toId = e.target.getAttribute("data-to-id");
+
+    fetch("/api/friends", {
+        method: "DELETE",
+        body: JSON.stringify({ user1: fromId, user2: toId }),
+        headers: { "Content-Type": "application/json" },
+    })
+        .then((res) => {
+            if (res.status === 202) {
+                e.target.parentElement.remove();
+            } else {
+                throw new Error("Could not unfriend!");
+            }
+        })
+        .catch((err) => {
+            alert(err.message);
         });
 }

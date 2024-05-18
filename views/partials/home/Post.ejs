@@ -4,7 +4,7 @@
         <div class="card__header">
           <img class="card__profile-img" src="<%= pictureUri %>" alt="c3po"/>
         <div class="card__meta">
-          <div class="card__meta__displayname">
+          <div data-user-id="<%= userId %>" onclick="handleUsernameClick(event)" class="card__meta__displayname">
             <%= name %>
         </div>
         <div class="card__meta__username">

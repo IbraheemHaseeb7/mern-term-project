@@ -26,7 +26,7 @@ router.post("/token/login", async (req, res) => {
 
         res.cookie("token", token, { httpOnly: true });
         req.session.user = user;
-        return res.status(200).json({ message: "Successfully logged in" });
+        return res.redirect("/");
     } catch (e) {
         return res.status(500).json({ message: e.message });
     }
@@ -46,9 +46,8 @@ router.post("/token/signup", async (req, res) => {
         });
 
         res.cookie("token", token, { httpOnly: true });
-        return res
-            .status(201)
-            .json({ message: "Successfully created new User" });
+        req.session.user = user;
+        return res.redirect("/");
     } catch (e) {
         return res.status(500).json({ message: e.message });
     }

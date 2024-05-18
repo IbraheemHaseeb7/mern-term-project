@@ -71,10 +71,17 @@ router.delete("/", verifyToken, doesCommentExist, async (req, res) => {
 
 router.get("/", verifyToken, async (req, res) => {
     try {
-        const { postId } = req.query;
+        let { postId, limit, skip } = req.query;
 
         if (!postId) {
             return res.status(400).json({ message: "Post ID not provided" });
+        }
+
+        if (!limit) {
+            limit = 5;
+        }
+        if (!skip) {
+            skip = 0;
         }
 
         const comments = await Comment.aggregate([
@@ -96,6 +103,12 @@ router.get("/", verifyToken, async (req, res) => {
             },
             {
                 $sort: { createdAt: -1 },
+            },
+            {
+                $skip: +skip,
+            },
+            {
+                $limit: +limit,
             },
             {
                 $project: {

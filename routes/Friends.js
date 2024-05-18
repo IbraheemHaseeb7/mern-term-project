@@ -3,6 +3,7 @@ const Friends = require("../models/Friends");
 const FriendRequest = require("../models/FriendsRequest");
 const router = express.Router();
 const mongoose = require("mongoose");
+const User = require("../models/User");
 
 router.post("/", async (req, res) => {
     const { user1, user2 } = req.body;
@@ -27,6 +28,8 @@ router.post("/", async (req, res) => {
                 { from: user2, to: user1 },
             ],
         });
+        await User.findByIdAndUpdate(user1, { $inc: { friendsCount: 1 } });
+        await User.findByIdAndUpdate(user2, { $inc: { friendsCount: 1 } });
 
         await transaction.commitTransaction();
         transaction.endSession();
@@ -44,10 +47,25 @@ router.delete("/", async (req, res) => {
         return res.status(400).json({ message: "Invalid request!" });
     }
 
+    const transaction = await mongoose.startSession();
+    transaction.startTransaction();
+
     try {
-        await Friends.deleteOne({ user1, user2 });
+        await Friends.deleteOne({
+            $or: [
+                { user1: user1, user2: user2 },
+                { user1: user2, user2: user1 },
+            ],
+        });
+        await User.findByIdAndUpdate(user1, { $inc: { friendsCount: -1 } });
+        await User.findByIdAndUpdate(user2, { $inc: { friendsCount: -1 } });
+
+        await transaction.commitTransaction();
+        transaction.endSession();
+
         res.status(202).json({ message: "Friend removed!" });
     } catch (e) {
+        transaction.abortTransaction();
         res.status(500).json({ message: "Could not remove friend!" });
     }
 });

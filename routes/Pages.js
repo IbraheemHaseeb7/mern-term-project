@@ -1,23 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const authForPages = require("../middlewares/AuthForPages");
-const { get20Posts, get20PostsById } = require("./Post");
+const { get20PostsById } = require("./Post");
 const getUserIdFromToken = require("../utils/GetUserIdFromToken");
 const User = require("../models/User");
+const { Types } = require("mongoose");
 
 router.get("/", authForPages, async (req, res) => {
     res.locals.layout = true;
     try {
-        const cookies = req.cookies;
-        const userId = getUserIdFromToken(cookies.token);
+        const userId = req.session.user?._id;
         const posts = await get20PostsById(null, userId, 5);
-        res.render("index.ejs", {
+
+        return res.render("index.ejs", {
             title: "Home",
             posts: posts,
             error: null,
         });
     } catch (error) {
-        res.render("index.ejs", {
+        return res.render("index.ejs", {
             title: "Home",
             posts: [],
             error: error.message,
@@ -41,20 +42,183 @@ router.get("/profile/:userId", async (req, res) => {
 
     try {
         if (userId === req.session.user?._id) {
-            const posts = await get20PostsById(userId);
+            const posts = await get20PostsById(userId, userId, 5, 0);
 
             res.render("profile.ejs", {
                 title: "Welcome Back",
-                currentUser: req.session.user,
+                currentUser: {
+                    ...req.session.user,
+                    isFriend: true,
+                    canAddFriend: false,
+                    hasSentFriendRequest: false,
+                },
                 posts: posts,
             });
         } else {
-            const user = await User.findById(userId);
-            const posts = await get20PostsById(userId, req.session.user?._id);
+            const otherUserId = req.session.user?._id;
+            const user = await User.aggregate([
+                {
+                    $match: { _id: new Types.ObjectId(userId) },
+                },
+                {
+                    $lookup: {
+                        from: "friends",
+                        let: { userId: "$_id" },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $or: [
+                                            {
+                                                $and: [
+                                                    {
+                                                        $eq: [
+                                                            "$user1",
+                                                            new Types.ObjectId(
+                                                                userId
+                                                            ),
+                                                        ],
+                                                    },
+                                                    {
+                                                        $eq: [
+                                                            "$user2",
+                                                            new Types.ObjectId(
+                                                                otherUserId
+                                                            ),
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                $and: [
+                                                    {
+                                                        $eq: [
+                                                            "$user1",
+                                                            new Types.ObjectId(
+                                                                otherUserId
+                                                            ),
+                                                        ],
+                                                    },
+                                                    {
+                                                        $eq: [
+                                                            "$user2",
+                                                            new Types.ObjectId(
+                                                                userId
+                                                            ),
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                            { $limit: 1 },
+                        ],
+                        as: "friendship",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "friendrequests",
+                        let: { userId: "$_id" },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: [
+                                                    "$from",
+                                                    new Types.ObjectId(
+                                                        otherUserId
+                                                    ),
+                                                ],
+                                            },
+                                            {
+                                                $eq: [
+                                                    "$to",
+                                                    new Types.ObjectId(userId),
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                            { $limit: 1 },
+                        ],
+                        as: "friendRequestSent",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "friendrequests",
+                        let: { userId: "$_id" },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            {
+                                                $eq: [
+                                                    "$from",
+                                                    new Types.ObjectId(userId),
+                                                ],
+                                            },
+                                            {
+                                                $eq: [
+                                                    "$to",
+                                                    new Types.ObjectId(
+                                                        otherUserId
+                                                    ),
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                            { $limit: 1 },
+                        ],
+                        as: "friendRequestReceived",
+                    },
+                },
+                {
+                    $addFields: {
+                        isFriend: { $gt: [{ $size: "$friendship" }, 0] },
+                        hasSentFriendRequest: {
+                            $gt: [{ $size: "$friendRequestSent" }, 0],
+                        },
+                        hasReceivedFriendRequest: {
+                            $gt: [{ $size: "$friendRequestReceived" }, 0],
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        name: 1,
+                        email: 1,
+                        isFriend: 1,
+                        friendsCount: 1,
+                        pictureUri: 1,
+                        coverUri: 1,
+                        bio: 1,
+                        joiningDate: 1,
+                        hasSentFriendRequest: 1,
+                        hasReceivedFriendRequest: 1,
+                    },
+                },
+            ]);
+            const posts = await get20PostsById(
+                userId,
+                req.session.user?._id,
+                5,
+                0
+            );
 
             res.render("profile.ejs", {
-                title: user.name,
-                currentUser: user,
+                title: user[0].name,
+                currentUser: { ...user[0], canAddFriend: true },
                 posts: posts,
             });
         }

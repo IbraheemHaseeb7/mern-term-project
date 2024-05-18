@@ -1,15 +1,29 @@
 const postsContainer = document.querySelector(
-    ".main-container .centeral-container .posts-container"
+    ".profile-main-container .posts-container"
 );
+
+const userId = window.location.pathname.split("/")[2];
 
 window.addEventListener(
     "scroll",
     () => {
-        if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
-            fetch(`/api/posts?limit=5&skip=${postsContainer.children.length}`, {
-                method: "GET",
-            })
-                .then((res) => res.json())
+        if (
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight
+        ) {
+            fetch(
+                `/api/posts?matchingUserId=${userId}&limit=5&skip=${postsContainer.children.length}`,
+                {
+                    method: "GET",
+                }
+            )
+                .then((res) => {
+                    if (res.status === 200) {
+                        return res.json();
+                    } else {
+                        throw new Error("Something went wrong");
+                    }
+                })
                 .then((data) => {
                     data.forEach((post) => {
                         let postTimestamp = new Date(post.timestamp);
@@ -26,9 +40,7 @@ window.addEventListener(
                                                 post.user.pictureUri
                                             }"/>
                                             <div class="card__meta">
-                                                <div data-user-id="${
-                                                    post.user._id
-                                                }" onclick="handleUsernameClick(event)" class="card__meta__displayname">
+                                                <div class="card__meta__displayname">
                                                     ${post.user.name}
                                                 </div>
                                                 <div class="card__meta__username">

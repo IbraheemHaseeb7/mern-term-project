@@ -11,12 +11,12 @@ function handleLogin(e) {
             "Content-Type": "application/json",
         },
     })
-        .then((res) => res.json())
         .then((res) => {
-            console.log(res);
-            document.getElementById("email").value = "";
-            document.getElementById("password").value = "";
-            window.location.href = "/";
+            if (res.redirected) {
+                window.location.href = res.url;
+            } else {
+                document.getElementById("password").value = "";
+            }
         })
         .catch((err) => {
             document.getElementById("password").value = "";
@@ -56,7 +56,7 @@ function handleSignup(e) {
     })
         .then((res) => res.json())
         .then((res) => {
-            console.log(res);
+            window.location.href = "/";
         });
 }
 

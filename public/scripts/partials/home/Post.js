@@ -228,24 +228,8 @@ async function openPostModal(postId) {
         .then((res) => res.json())
         .then(async (res) => {
             const post = res[0];
-            const now = new Date();
             const date = new Date(post.timestamp);
-
-            const diffInSeconds = Math.floor((now - date) / 1000);
-            let timePassed;
-            if (diffInSeconds < 60) {
-                timePassed = `${diffInSeconds} seconds`;
-            } else if (diffInSeconds < 3600) {
-                const minutes = Math.floor(diffInSeconds / 60);
-                timePassed = `${minutes} minutes`;
-            } else if (diffInSeconds < 86400) {
-                const hours = Math.floor(diffInSeconds / 3600);
-                timePassed = `${hours} hours`;
-            } else {
-                const days = Math.floor(diffInSeconds / 86400);
-                timePassed = `${days}
-                    days`;
-            }
+            const timePassed = getTimeValue(date);
 
             let modalContent = `
                 <div class="modal-centeral-container">
@@ -310,45 +294,67 @@ async function openPostModal(postId) {
             modalContainer.innerHTML = modalContent;
             modalContainer.setAttribute("style", "pointer-events: all;");
 
-            fetch(`http://localhost:3000/api/comments?postId=${postId}`, {
-                method: "GET",
-            })
-                .then((res) => res.json())
-                .then((res) => {
-                    const commentsContainer = document.querySelector(
-                        ".comments-container"
-                    );
+            fetchComments(postId);
+        })
+        .catch((error) => {});
 
-                    res.forEach((comment) => {
-                        const wrapper = document.createElement("div");
-                        wrapper.classList.add("wrapper");
+    const modalCenteralContainer = document.querySelector(
+        ".modal-container .modal-centeral-container"
+    );
 
-                        const now = new Date();
-                        const date = new Date(comment.createdAt);
+    modalCenteralContainer.addEventListener("scroll", (e) => {
+        if (
+            e.target.scrollTop + e.target.clientHeight >=
+            e.target.scrollHeight
+        ) {
+            const toSkip = modalCenteralContainer.children[2]?.children.length;
+            fetchComments(postId, toSkip);
+        }
+    });
+}
 
-                        const diffInSeconds = Math.floor((now - date) / 1000);
-                        let timePassed;
-                        if (diffInSeconds < 60) {
-                            timePassed = `${diffInSeconds} seconds`;
-                        } else if (diffInSeconds < 3600) {
-                            const minutes = Math.floor(diffInSeconds / 60);
-                            timePassed = `${minutes} minutes`;
-                        } else if (diffInSeconds < 86400) {
-                            const hours = Math.floor(diffInSeconds / 3600);
-                            timePassed = `${hours} hours`;
-                        } else {
-                            const days = Math.floor(diffInSeconds / 86400);
-                            timePassed = `${days}
-                                days`;
-                        }
+function closePostModal() {
+    const modalContainer = document.querySelector(".modal-container");
+    modalContainer.removeAttribute("style");
+    modalContainer.innerHTML = "";
+}
 
-                        wrapper.innerHTML = `
+function handleUsernameClick(e) {
+    e.preventDefault();
+
+    const userId = e.target.getAttribute("data-user-id");
+    window.location.href = `http://localhost:3000/profile/${userId}`;
+}
+
+function fetchComments(postId, skip = 0) {
+    fetch(`http://localhost:3000/api/comments?postId=${postId}&skip=${skip}`, {
+        method: "GET",
+    })
+        .then((res) => {
+            if (res.status !== 200) {
+                throw new Error("Could not fetch comments");
+            }
+            return res.json();
+        })
+        .then((res) => {
+            const commentsContainer = document.querySelector(
+                ".comments-container"
+            );
+
+            res.forEach((comment) => {
+                const wrapper = document.createElement("div");
+                wrapper.classList.add("wrapper");
+
+                const date = new Date(comment.createdAt);
+                const timePassed = getTimeValue(date);
+
+                wrapper.innerHTML = `
                             <ul class="cards__list">
                                 <li class="card">
                                     <div class="card__header">
                                         <img class="card__profile-img comment-img" src="${comment.user.pictureUri}" alt="c3po"/>
                                         <div class="card__meta">
-                                            <div class="card__meta__displayname">
+                                            <div data-user-id="${comment.user._id}" onclick="handleUsernameClick(event) class="card__meta__displayname">
                                                 ${comment.user.name}
                                             </div>
                                             <div class="card__meta__username">
@@ -366,18 +372,10 @@ async function openPostModal(postId) {
                             </ul>
                         `;
 
-                        commentsContainer.appendChild(wrapper);
-                    });
-                })
-                .catch((error) => {
-                    alert("Could not fetch comments");
-                });
+                commentsContainer.appendChild(wrapper);
+            });
         })
-        .catch((error) => {});
-}
-
-function closePostModal() {
-    const modalContainer = document.querySelector(".modal-container");
-    modalContainer.removeAttribute("style");
-    modalContainer.innerHTML = "";
+        .catch((error) => {
+            alert("Could not fetch comments");
+        });
 }

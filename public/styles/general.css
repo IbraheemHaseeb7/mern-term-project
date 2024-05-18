@@ -43,3 +43,7 @@ button {
 button:hover {
     background-color: var(--main-theme-hovered);
 }
+
+i {
+    pointer-events: none;
+}

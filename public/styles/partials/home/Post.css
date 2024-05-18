@@ -48,6 +48,11 @@
     font-size: 0.85em;
 }
 
+.card__meta__displayname:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .card__meta__timestamp {
     color: #aaa;
     margin-top: 0.25em;

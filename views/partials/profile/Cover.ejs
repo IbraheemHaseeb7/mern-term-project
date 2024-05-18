@@ -17,6 +17,7 @@
     else { const days = Math.floor(diffInSeconds / 86400); timePassed = `${days}
     days`; } %>
     <p class="member-since">Member Since: <b><%= timePassed %></b></p>
+    <p class="friends-count">Friends: <b><%= currentUser.friendsCount %></b></p>
     <div class="bio-container">
         <p>Bio:</p>
         <p class="bio"><%= currentUser.bio %></p>
@@ -24,16 +25,65 @@
     <div class="edit-share-buttons-container">
         <% if (user._id === currentUser._id) { %>
         <button
+            title="Edit Profile"
             data-user-id="<%= currentUser._id %>"
             onclick="handleEditClick(event)"
         >
             <i class="fa-solid fa-pen"></i>
         </button>
         <% } %>
+
         <button
+            title="Copy Profile Link"
             onclick="navigator.clipboard.writeText(document.location.origin + '/profile/<%= currentUser._id %>'); alert('Successfully Copied profile link')"
         >
             <i class="fa-solid fa-share"></i>
         </button>
+        <% if(!currentUser.isFriend && !currentUser.hasSentFriendRequest &&
+        !currentUser.hasReceivedFriendRequest) { %>
+        <button
+            data-to-user-id="<%= currentUser._id %>"
+            data-from-user-id="<%= user._id %>"
+            title="Send Friend Request"
+            onclick="handleFriendRequest(event)"
+        >
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <% } else if (currentUser.isFriend && currentUser.canAddFriend) { %>
+        <button
+            data-to-user-id="<%= currentUser._id %>"
+            data-from-user-id="<%= user._id %>"
+            title="Remove Friend"
+            onclick="handleRemoveFriend(event)"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <% } %> <% if (currentUser.hasSentFriendRequest) {%>
+        <button
+            data-to-user-id="<%= currentUser._id %>"
+            data-from-user-id="<%= user._id %>"
+            title="Cancel Friend Request"
+            onclick="handleCancelFriendRequest(event)"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <% } %> <% if (currentUser.hasReceivedFriendRequest) { %>
+        <button
+            data-to-user-id="<%= currentUser._id %>"
+            data-from-user-id="<%= user._id %>"
+            title="Accept Friend Request"
+            onclick="handleAcceptFriendRequest(event)"
+        >
+            <i class="fa-solid fa-check"></i>
+        </button>
+        <button
+            data-to-user-id="<%= currentUser._id %>"
+            data-from-user-id="<%= user._id %>"
+            title="Reject Friend Request"
+            onclick="handleRejectFriendRequest(event)"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <% } %>
     </div>
 </div>

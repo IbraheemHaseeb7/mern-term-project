@@ -8,14 +8,19 @@ const { Types } = require("mongoose");
 // for getting 20 Posts
 router.get("/", verifyToken, async (req, res) => {
     try {
-        const { limit, skip } = req.query;
+        const { limit, skip, matchingUserId } = req.query;
 
         if (!limit || !skip) {
             return res.status(400).json({ message: "Invalid Request" });
         }
 
         const userId = req.session.user?._id;
-        const posts = await get20PostsById(null, userId, +limit, +skip);
+        const posts = await get20PostsById(
+            matchingUserId,
+            userId,
+            +limit,
+            +skip
+        );
         res.status(200).json(posts);
     } catch (e) {
         res.status(500).json({ message: e.message });

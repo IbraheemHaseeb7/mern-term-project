@@ -54,8 +54,6 @@ router.delete("/", verifyToken, async (req, res) => {
 
         res.status(200).json({ message: "Like removed" });
     } catch (error) {
-        console.log(error);
-
         transaction.abortTransaction();
         transaction.endSession();
         res.status(500).json({ message: error.message });

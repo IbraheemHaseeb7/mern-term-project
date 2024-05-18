@@ -174,3 +174,218 @@ async function handleSubmitEditForm(e) {
         .then((res) => closeModal())
         .catch((err) => alert("Could not update user data..."));
 }
+
+function handleFriendRequest(e) {
+    e.preventDefault();
+
+    fetch("http://localhost:3000/api/friendRequests", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            to: e.target.getAttribute("data-to-user-id"),
+            from: e.target.getAttribute("data-from-user-id"),
+        }),
+    })
+        .then((res) => {
+            if (res.status === 201) {
+                alert("Friend Request Sent!");
+
+                const parent = e.target.parentElement;
+                parent.removeChild(e.target);
+
+                const button = document.createElement("button");
+                button.title = "Cancel Friend Request";
+                button.onclick = handleCancelFriendRequest;
+                button.setAttribute(
+                    "data-to-user-id",
+                    e.target.getAttribute("data-to-user-id")
+                );
+                button.setAttribute(
+                    "data-from-user-id",
+                    e.target.getAttribute("data-from-user-id")
+                );
+
+                button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+                parent.appendChild(button);
+            } else {
+                throw new Error("Could not send friend request...");
+            }
+        })
+        .catch((err) => alert(err.message));
+}
+
+function handleCancelFriendRequest(e) {
+    e.preventDefault();
+
+    fetch("http://localhost:3000/api/friendRequests", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            to: e.target.getAttribute("data-to-user-id"),
+            from: e.target.getAttribute("data-from-user-id"),
+        }),
+    })
+        .then((res) => {
+            if (res.status === 202) {
+                alert("Friend Request Cancelled!");
+
+                const parent = e.target.parentElement;
+                parent.removeChild(e.target);
+
+                const button = document.createElement("button");
+                button.title = "Send Friend Requet";
+                button.onclick = handleFriendRequest;
+                button.setAttribute(
+                    "data-to-user-id",
+                    e.target.getAttribute("data-to-user-id")
+                );
+                button.setAttribute(
+                    "data-from-user-id",
+                    e.target.getAttribute("data-from-user-id")
+                );
+
+                button.innerHTML = `<i class="fa-solid fa-plus"></i>`;
+                parent.appendChild(button);
+            } else {
+                throw new Error("Could not Cancel friend request...");
+            }
+        })
+        .catch((err) => alert(err.message));
+}
+
+function handleRejectFriendRequest(e) {
+    e.preventDefault();
+
+    fetch("http://localhost:3000/api/friendRequests", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            to: e.target.getAttribute("data-from-user-id"),
+            from: e.target.getAttribute("data-to-user-id"),
+        }),
+    })
+        .then((res) => {
+            if (res.status === 202) {
+                alert("Friend Request Rejected!");
+
+                const parent = e.target.parentElement;
+                const children = parent.children;
+                const lastChild = children[children.length - 1];
+                const secondLastChild = children[children.length - 2];
+
+                parent.removeChild(lastChild);
+                parent.removeChild(secondLastChild);
+
+                const button = document.createElement("button");
+                button.title = "Send Friend Requet";
+                button.setAttribute(
+                    "data-to-user-id",
+                    e.target.getAttribute("data-to-user-id")
+                );
+                button.setAttribute(
+                    "data-from-user-id",
+                    e.target.getAttribute("data-from-user-id")
+                );
+                button.onclick = handleFriendRequest;
+
+                button.innerHTML = `<i class="fa-solid fa-plus"></i>`;
+                parent.appendChild(button);
+            } else {
+                throw new Error("Could not reject friend request...");
+            }
+        })
+        .catch((err) => alert(err.message));
+}
+
+function handleRemoveFriend(e) {
+    e.preventDefault();
+
+    fetch("http://localhost:3000/api/friends", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user1: e.target.getAttribute("data-to-user-id"),
+            user2: e.target.getAttribute("data-from-user-id"),
+        }),
+    })
+        .then((res) => {
+            if (res.status === 202) {
+                alert("Friend Removed!");
+
+                const parent = e.target.parentElement;
+                parent.removeChild(e.target);
+
+                const button = document.createElement("button");
+                button.title = "Send Friend Requet";
+                button.setAttribute(
+                    "data-to-user-id",
+                    e.target.getAttribute("data-to-user-id")
+                );
+                button.setAttribute(
+                    "data-from-user-id",
+                    e.target.getAttribute("data-from-user-id")
+                );
+                button.onclick = handleFriendRequest;
+
+                button.innerHTML = `<i class="fa-solid fa-plus"></i>`;
+                parent.appendChild(button);
+            } else {
+                throw new Error("Could not remove friend...");
+            }
+        })
+        .catch((err) => alert(err.message));
+}
+
+function handleAcceptFriendRequest(e) {
+    e.preventDefault();
+
+    fetch("http://localhost:3000/api/friends", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user1: e.target.getAttribute("data-to-user-id"),
+            user2: e.target.getAttribute("data-from-user-id"),
+        }),
+    })
+        .then((res) => {
+            if (res.status === 201) {
+                alert("Friend Added!");
+
+                const parent = e.target.parentElement;
+                const children = parent.children;
+                const lastChild = children[children.length - 1];
+                const secondLastChild = children[children.length - 2];
+
+                parent.removeChild(lastChild);
+                parent.removeChild(secondLastChild);
+
+                const button = document.createElement("button");
+                button.title = "Remove Friend";
+                button.setAttribute(
+                    "data-to-user-id",
+                    e.target.getAttribute("data-to-user-id")
+                );
+                button.setAttribute(
+                    "data-from-user-id",
+                    e.target.getAttribute("data-from-user-id")
+                );
+                button.onclick = handleRemoveFriend;
+
+                button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+                parent.appendChild(button);
+            } else {
+                throw new Error("Could not add friend...");
+            }
+        })
+        .catch((err) => alert(err.message));
+}

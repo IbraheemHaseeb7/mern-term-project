@@ -15,10 +15,10 @@
             hours = Math.floor(diffInSeconds / 3600); timePassed = `${hours}
             hours`; } else { const days = Math.floor(diffInSeconds / 86400);
             timePassed = `${days} days`; } %> <%- include('partials/home/Post',
-            { postId: post._id ,name: post.user.name, hasLiked: post.hasLiked,
-            likesCount: post.likesCount, commentsCount: post.commentsCount,
-            description: post.description, timePassed: timePassed, pictureUri:
-            post.user.pictureUri }) %> <% }) %>
+            { postId: post._id, userId: post.user._id ,name: post.user.name,
+            hasLiked: post.hasLiked, likesCount: post.likesCount, commentsCount:
+            post.commentsCount, description: post.description, timePassed:
+            timePassed, pictureUri: post.user.pictureUri }) %> <% }) %>
         </div>
     </div>
     <div class="right-container"></div>
