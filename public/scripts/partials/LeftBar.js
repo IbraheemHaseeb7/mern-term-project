@@ -26,3 +26,8 @@ function handleNetwork(e) {
     e.preventDefault();
     window.location.href = "/network";
 }
+
+function handleChat(e) {
+    e.preventDefault();
+    window.location.href = "/chats";
+}

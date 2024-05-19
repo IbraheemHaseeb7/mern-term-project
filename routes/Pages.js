@@ -4,6 +4,7 @@ const authForPages = require("../middlewares/AuthForPages");
 const { get20PostsById } = require("./Post");
 const getUserIdFromToken = require("../utils/GetUserIdFromToken");
 const User = require("../models/User");
+const Friends = require("../models/Friends");
 const { Types } = require("mongoose");
 
 router.get("/", authForPages, async (req, res) => {
@@ -222,6 +223,36 @@ router.get("/profile/:userId", async (req, res) => {
                 posts: posts,
             });
         }
+    } catch (error) {
+        res.status(500).json({ message: error.toString() });
+    }
+});
+
+router.get("/chats", authForPages, async (req, res) => {
+    res.locals.layout = true;
+    const userId = req.session.user?._id;
+
+    try {
+        const friendsData = await Friends.find({
+            $or: [
+                { user1: new Types.ObjectId(userId) },
+                { user2: new Types.ObjectId(userId) },
+            ],
+        })
+            .populate("user1", "_id name pictureUri joiningDate")
+            .populate("user2", "_id name pictureUri joiningDate");
+
+        const friends = friendsData.map((friend) => {
+            if (friend.user1._id.toString() === userId) {
+                return friend.user2;
+            }
+            return friend.user1;
+        });
+
+        res.render("chats.ejs", {
+            title: "Chats",
+            friends: friends,
+        });
     } catch (error) {
         res.status(500).json({ message: error.toString() });
     }

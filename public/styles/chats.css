@@ -1,0 +1,57 @@
+.chats-container {
+    width: calc(100% - 25% - 1rem);
+    margin: 6rem 0 0 calc(25% + 1rem);
+    height: calc(100vh - 6rem);
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.chat-options {
+    width: 20%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.chat-options > button {
+    width: 90%;
+    height: 3rem;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.chat-options > button > img {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.chat-room-container {
+    width: 80%;
+    margin: 0 0.5rem;
+    height: 100%;
+    border-radius: 5px;
+
+    background-color: #fff;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-room-container > h2 {
+    color: #00000046;
+}

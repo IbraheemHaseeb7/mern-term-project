@@ -1,0 +1,16 @@
+<link href="/styles/chats.css" rel="stylesheet" />
+
+<div class="chats-container">
+    <div class="chat-options">
+        <h3>Chats</h3>
+        <% friends.forEach((friend) => { %>
+        <button data-user-id="<%= friend._id %>" onclick="handleChat(event)">
+            <img src="<%= friend.pictureUri %>" />
+            <p><%= friend.name %></p>
+        </button>
+        <% }) %>
+    </div>
+    <div class="chat-room-container">
+        <h2>No Chat Selected...</h2>
+    </div>
+</div>
