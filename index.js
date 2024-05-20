@@ -21,7 +21,8 @@ const likeRoutes = require("./routes/Like");
 const uploadRoutes = require("./routes/Upload");
 const commentRoutes = require("./routes/Comment");
 const friendsRoutes = require("./routes/Friends");
-const friendRequest = require("./routes/FriendRequest");
+const friendRequestRoutes = require("./routes/FriendRequest");
+const chatRoutes = require("./routes/Chat");
 
 // Setting middlewares and view engine
 app.use(express.static(__dirname + "\\public"));
@@ -46,9 +47,10 @@ app.use("/api/posts", postRoutes);
 app.use("/api/likes", likeRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/upload", uploadRoutes);
-app.use("/api/friendRequests", friendRequest);
+app.use("/api/friendRequests", friendRequestRoutes);
 app.use("/api/friends", friendsRoutes);
 app.use("/", pageRoutes);
+app.use("/api/chats", chatRoutes);
 
 // socket testing
 socketHandler(io);

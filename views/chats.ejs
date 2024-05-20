@@ -4,7 +4,11 @@
     <div class="chat-options">
         <h3>Chats</h3>
         <% friends.forEach((friend) => { %>
-        <button data-user-id="<%= friend._id %>" onclick="handleChat(event)">
+        <button
+            data-user1-id="<%= user._id %>"
+            data-user2-id="<%= friend._id %>"
+            onclick="handleChat(event)"
+        >
             <img src="<%= friend.pictureUri %>" />
             <p><%= friend.name %></p>
         </button>
@@ -14,3 +18,10 @@
         <h2>No Chat Selected...</h2>
     </div>
 </div>
+
+<script
+    src="https://cdn.socket.io/4.7.5/socket.io.min.js"
+    integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO"
+    crossorigin="anonymous"
+></script>
+<script src="/scripts/chat.js"></script>

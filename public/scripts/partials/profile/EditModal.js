@@ -137,6 +137,14 @@ async function handleSubmitEditForm(e) {
     const originalCoverUri = e.target.getAttribute("data-cover");
     const userId = e.target.getAttribute("data-user-id");
 
+    const profileEditContainer = document.querySelector(
+        ".profile-edit-container"
+    );
+    const loadingShadow = document.createElement("div");
+    loadingShadow.classList.add("loading-shadow");
+    loadingShadow.innerHTML = `<h1>Please Wait...</h1>`;
+    profileEditContainer.appendChild(loadingShadow);
+
     const data = { pictureUri, coverUri, name, email, bio };
 
     if (coverUri !== originalCoverUri) {
