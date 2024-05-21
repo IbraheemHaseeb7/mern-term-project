@@ -15,6 +15,8 @@
     border-radius: 5px;
 
     margin: 0 5px;
+    transition: all 0.25s ease;
+    z-index: 10;
 }
 
 .left-bar-container > .profile-container {
@@ -52,4 +54,30 @@
 
 .left-bar-container button p {
     margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .left-bar-container {
+        width: 100%;
+        height: 100%;
+        top: 6rem;
+        left: -100%;
+    }
+
+    .left-bar-container > .profile-container {
+        height: 10rem;
+    }
+
+    .profile-container > img {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    .left-bar-container button {
+        width: 90%;
+    }
+}
+
+.open {
+    left: 0;
 }

@@ -86,3 +86,10 @@
 .data-row button i {
     pointer-events: none;
 }
+
+@media screen and (max-width: 768px) {
+    .network-container {
+        width: 100%;
+        left: 0;
+    }
+}

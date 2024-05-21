@@ -6,14 +6,39 @@ const userSchema = new Schema(
             type: Schema.Types.ObjectId,
             default: () => new Types.ObjectId(),
         },
-        name: String,
-        email: String,
-        password: String,
-        joiningDate: Date,
-        friendsCount: Number,
-        bio: String,
-        pictureUri: String,
-        coverUri: String,
+        name: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        password: {
+            type: String,
+            required: true,
+        },
+        joiningDate: {
+            type: Date,
+            default: () => new Date(),
+        },
+        friendsCount: {
+            type: Number,
+            default: 0,
+        },
+        bio: {
+            type: String,
+            default: "",
+        },
+        pictureUri: {
+            type: String,
+            default: "/assets/general/default-profile-image.jpg",
+        },
+        coverUri: {
+            type: String,
+            default: "/assets/general/default-cover-image.jpg",
+        },
     },
     { collection: "User" }
 );

@@ -79,14 +79,21 @@ function handleLike(e) {
 
     const postId = e.target.getAttribute("data-post-id");
     const hasLiked = e.target.getAttribute("data-has-liked") === "true";
+    const likesElements = document.querySelectorAll(
+        `.card__footer__like [data-post-id="${postId}"]`
+    );
 
     try {
         if (hasLiked) {
             disLikePost(postId, e);
-            e.target.setAttribute("data-has-liked", "false");
+            for (let i = 0; i < likesElements.length; i++) {
+                likesElements[i].setAttribute("data-has-liked", "false");
+            }
         } else {
             likePost(postId, e);
-            e.target.setAttribute("data-has-liked", "true");
+            for (let i = 0; i < likesElements.length; i++) {
+                likesElements[i].setAttribute("data-has-liked", "true");
+            }
         }
     } catch (error) {
         alert(error);
@@ -103,6 +110,9 @@ function handleComment(e) {
 
 function likePost(postId, e) {
     let likesCount = +e.target.children[0].innerHTML;
+    const likesElements = document.querySelectorAll(
+        `.card__footer__like [data-post-id="${postId}"] p`
+    );
 
     fetch("http://localhost:3000/api/likes", {
         method: "POST",
@@ -113,10 +123,14 @@ function likePost(postId, e) {
     })
         .then((res) => {
             if (res.status === 201) {
-                e.target.classList.add("fa-solid");
-                e.target.classList.add("red-like");
-                e.target.classList.remove("fa-regular");
-                e.target.children[0].innerHTML = likesCount + 1;
+                for (let i = 0; i < likesElements.length; i++) {
+                    likesElements[i].innerHTML = likesCount + 1;
+                    likesElements[i].parentElement.classList.add("fa-solid");
+                    likesElements[i].parentElement.classList.add("red-like");
+                    likesElements[i].parentElement.classList.remove(
+                        "fa-regular"
+                    );
+                }
             } else {
                 alert("Could not like post");
             }
@@ -126,6 +140,9 @@ function likePost(postId, e) {
 
 function disLikePost(postId, e) {
     let likesCount = +e.target.children[0].innerHTML;
+    const likesElements = document.querySelectorAll(
+        `.card__footer__like [data-post-id="${postId}"] p`
+    );
 
     fetch("http://localhost:3000/api/likes", {
         method: "DELETE",
@@ -136,10 +153,12 @@ function disLikePost(postId, e) {
     })
         .then((res) => {
             if (res.status === 200) {
-                e.target.classList.add("fa-regular");
-                e.target.classList.remove("fa-solid");
-                e.target.classList.remove("red-like");
-                e.target.children[0].innerHTML = likesCount - 1;
+                for (let i = 0; i < likesElements.length; i++) {
+                    likesElements[i].innerHTML = likesCount - 1;
+                    likesElements[i].parentElement.classList.add("fa-regular");
+                    likesElements[i].parentElement.classList.remove("fa-solid");
+                    likesElements[i].parentElement.classList.remove("red-like");
+                }
             } else {
                 alert("Could not dislike post");
             }
@@ -261,7 +280,9 @@ async function openPostModal(postId) {
                                     </div>
                                     <div class="card__footer">
                                     <span class="card__footer__like">
-                                        <i onclick="handleLike(event)" data-post-id="${postId}" data-has-liked="${postId}" class="${
+                                        <i onclick="handleLike(event)" data-post-id="${postId}" data-has-liked="${
+                post.hasLiked
+            }" class="${
                 post.hasLiked ? `fa-solid red-like` : `fa-regular`
             } fa-heart like-btn">
                                         <p>${post.likesCount}</p></i> 

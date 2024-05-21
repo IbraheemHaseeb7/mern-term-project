@@ -2,7 +2,7 @@
 <link href="/styles/partials/home/Post.css" rel="stylesheet" />
 
 <section class="main-container">
-    <div class="left-container"></div>
+    <div class="left-side-container"></div>
     <div class="centeral-container">
         <%- include("partials/home/CreatePost"); %>
         <div class="posts-container">
@@ -21,7 +21,12 @@
             timePassed, pictureUri: post.user.pictureUri }) %> <% }) %>
         </div>
     </div>
-    <div class="right-container"></div>
+    <div class="right-container">
+        <div class="coming-soon">
+            <h1>Exciting Features</h1>
+            <p>Coming soon...</p>
+        </div>
+    </div>
 </section>
 <div class="modal-container"></div>
 <script src="/scripts/partials/home/Post.js"></script>

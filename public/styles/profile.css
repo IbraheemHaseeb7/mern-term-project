@@ -6,3 +6,9 @@
     top: 6rem;
     right: 5px;
 }
+
+@media screen and (max-width: 768px) {
+    .profile-main-container {
+        width: 100%;
+    }
+}

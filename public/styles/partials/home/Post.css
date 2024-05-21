@@ -2,6 +2,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    pointer-events: all;
 }
 
 .cards__list {
@@ -90,7 +91,7 @@
 
 .like-btn,
 .comment-btn {
-    cursor: pointer;
+    cursor: pointer !important;
     display: flex !important;
     gap: 5px;
 }

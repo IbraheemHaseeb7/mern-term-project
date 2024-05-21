@@ -32,6 +32,17 @@ function handleSignup(e) {
     const name = document.getElementById("name").value;
     const age = parseInt(document.getElementById("age").value);
 
+    if (
+        email === "" ||
+        password === "" ||
+        confirmPassword === "" ||
+        name === "" ||
+        isNaN(age)
+    ) {
+        alert("Please fill out all fields");
+        return;
+    }
+
     if (password !== confirmPassword) {
         alert("Passwords do not match");
         return;
@@ -54,9 +65,16 @@ function handleSignup(e) {
             "Content-Type": "application/json",
         },
     })
-        .then((res) => res.json())
-        .then((res) => {
-            window.location.href = "/";
+        .then(async (res) => {
+            if (res.redirected) {
+                window.location.href = res.url;
+            } else {
+                const response = await res.json();
+                throw new Error(response.message);
+            }
+        })
+        .catch((err) => {
+            alert(err.toString());
         });
 }
 

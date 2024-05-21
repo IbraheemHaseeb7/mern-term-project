@@ -197,3 +197,19 @@
 .loading-shadow > h1 {
     color: white;
 }
+
+@media screen and (max-width: 786px) {
+    .edit-container {
+        width: 90%;
+    }
+
+    .picture-edit {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    .edit-form {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}

@@ -181,6 +181,8 @@ async function handleSubmitEditForm(e) {
         .then((res) => res.json())
         .then((res) => closeModal())
         .catch((err) => alert("Could not update user data..."));
+
+    alert("Please login again to see changes");
 }
 
 function handleFriendRequest(e) {

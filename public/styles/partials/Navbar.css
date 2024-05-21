@@ -32,11 +32,39 @@ nav > form > button {
     width: 5rem;
 }
 
-nav > div {
+nav > .image-container {
     height: 5rem;
     cursor: pointer;
 }
 
-nav > div > a > img {
+nav > .image-container > a > img {
     height: 100%;
+}
+
+nav > .burger-container {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    nav {
+        grid-template-columns: 20% 60% 20%;
+    }
+
+    nav > form {
+        display: none;
+    }
+
+    nav > .image-container {
+        grid-column: 2/3;
+    }
+
+    nav > .burger-container {
+        display: flex;
+        grid-column: 1/2;
+        grid-row: 1/2;
+
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
 }

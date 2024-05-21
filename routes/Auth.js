@@ -61,15 +61,7 @@ router.post("/token/logout", async (req, res) => {
 
 module.exports = router;
 
-function insertUser(
-    email,
-    password,
-    age,
-    name,
-    bio = null,
-    coverUri = null,
-    pictureUri = null
-) {
+function insertUser(email, password, age, name) {
     return new Promise(async (resolve, reject) => {
         try {
             const foundUser = await User.findOne({ email });
@@ -88,13 +80,10 @@ function insertUser(
                 friendsCount: 0,
                 friends: [],
                 joiningDate: new Date(),
-                bio,
-                coverUri,
-                pictureUri,
             });
 
-            await user.save();
-            return resolve("Successfully inserted user");
+            const result = await user.save();
+            return resolve(result);
         } catch (e) {
             return reject(e);
         }

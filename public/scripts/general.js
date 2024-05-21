@@ -17,3 +17,9 @@ function getTimeValue(date) {
 
     return timePassed;
 }
+
+function handleOpenSideBar(e) {
+    e.preventDefault();
+    const leftbar = document.querySelector(".left-bar-container");
+    leftbar.classList.toggle("open");
+}

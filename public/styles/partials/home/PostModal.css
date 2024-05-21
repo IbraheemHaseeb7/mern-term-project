@@ -74,3 +74,22 @@
 .modal-comment-form textarea:hover {
     border: 1px solid black;
 }
+
+@media screen and (max-width: 768px) {
+    .modal-centeral-container {
+        width: 85%;
+    }
+
+    .modal-comment-form {
+        grid-template-columns: 100%;
+        grid-template-rows: 3rem 3rem;
+    }
+
+    .modal-comment-form textarea {
+        width: calc(100% - 1rem);
+    }
+
+    .modal-post-container {
+        width: 100%;
+    }
+}
