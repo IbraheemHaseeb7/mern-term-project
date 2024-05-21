@@ -6,6 +6,7 @@ const getUserIdFromToken = require("../utils/GetUserIdFromToken");
 const User = require("../models/User");
 const Friends = require("../models/Friends");
 const { Types } = require("mongoose");
+const path = require("path");
 
 router.get("/", authForPages, async (req, res) => {
     res.locals.layout = true;
@@ -261,6 +262,14 @@ router.get("/chats", authForPages, async (req, res) => {
 router.get("/network", (req, res) => {
     res.locals.layout = true;
     res.render("network.ejs");
+});
+
+router.get("/landing", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/pages/landing/index.html"));
+});
+
+router.get("/contactus", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/pages/contact/index.html"));
 });
 
 module.exports = router;

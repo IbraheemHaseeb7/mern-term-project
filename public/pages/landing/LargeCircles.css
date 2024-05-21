@@ -1,0 +1,264 @@
+.large-circles-container {
+    width: 100%;
+    height: 200vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 5rem 0;
+    overflow: hidden;
+}
+
+.large-circles-container > div {
+    width: 100%;
+    height: 50%;
+
+    position: relative;
+    top: 0;
+}
+
+.large-circle {
+    width: 55%;
+    aspect-ratio: 1/ 1;
+
+    background-color: var(--accent);
+    border-radius: 100%;
+
+    position: absolute;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+}
+
+.small-circle {
+    width: 10%;
+    aspect-ratio: 1 / 1;
+
+    background-color: var(--yellow);
+    border-radius: 100%;
+
+    z-index: 10;
+    position: absolute;
+    top: 0;
+}
+
+.left-large {
+    left: -10rem;
+}
+
+.left-small {
+    left: 30%;
+}
+
+.left-large > div {
+    width: 50%;
+    transform: translateX(3rem);
+}
+
+.large-circle > div > h1 {
+    font-size: 4rem;
+    margin: 0 0 1rem 0;
+}
+
+.large-circle > div > p {
+    font-size: 1.5rem;
+}
+
+.large-circle > div > h1,
+.large-circle > div > p {
+    color: var(--white);
+}
+
+.circle-card {
+    width: 36rem;
+    height: 30rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.right-cards .circle-card-image-1 {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    box-shadow: 0 5px 30px 0 var(--main);
+    transform: translate(40px, 40px);
+}
+
+.right-cards .circle-card-image-2 {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    box-shadow: 0 5px 30px 0 var(--main);
+}
+
+.right-large {
+    right: -10rem;
+}
+
+.right-small {
+    right: 30%;
+    top: 95%;
+}
+
+.left-cards {
+    left: 1rem;
+}
+
+.right-large > div {
+    width: 50%;
+    transform: translateX(-3rem);
+}
+
+.left-cards .circle-card-image-1 {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    box-shadow: 0 5px 30px 0 var(--main);
+}
+
+.left-cards .circle-card-image-2 {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    box-shadow: 0 5px 30px 0 var(--main);
+    transform: translate(-40px, 40px);
+}
+
+@media screen and (max-width: 968px) {
+    .large-circles-container {
+        height: 150vh;
+    }
+
+    .large-circle > div > h1 {
+        font-size: 3rem;
+    }
+
+    .large-circle > div > p {
+        font-size: 1.2rem;
+    }
+
+    .circle-card {
+        width: 30rem;
+        height: 25rem;
+    }
+
+    .right-cards .circle-card-image-1 {
+        transform: translate(30px, 30px);
+    }
+
+    .left-cards .circle-card-image-2 {
+        transform: translate(-30px, 30px);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .large-circles-container {
+        height: 150vh;
+    }
+
+    .large-circle {
+        width: 70%;
+    }
+
+    .large-circle > div > h1 {
+        font-size: 2rem;
+    }
+
+    .large-circle > div > p {
+        font-size: 1rem;
+    }
+
+    .left-large > div {
+        transform: translateX(5rem);
+    }
+
+    .circle-card {
+        width: 20rem;
+        height: 18rem;
+    }
+
+    .right-cards .circle-card-image-1 {
+        transform: translate(20px, 20px);
+    }
+
+    .left-cards .circle-card-image-2 {
+        transform: translate(-20px, 20px);
+    }
+
+    .right-small {
+        top: 60%;
+    }
+}
+
+@media screen and (max-width: 568px) {
+    .large-circles-container {
+        height: 100vh;
+    }
+
+    .large-circle {
+        width: 80%;
+    }
+
+    .large-circle > div > h1 {
+        font-size: 1.5rem;
+    }
+
+    .large-circle > div > p {
+        font-size: 0.8rem;
+    }
+
+    .left-large > div {
+        transform: translateX(6rem);
+    }
+
+    .circle-card {
+        width: 11rem;
+        height: 8rem;
+    }
+
+    .right-cards .circle-card-image-1 {
+        transform: translate(10px, 10px);
+    }
+
+    .left-cards .circle-card-image-2 {
+        transform: translate(-10px, 10px);
+    }
+
+    .right-small {
+        top: 80%;
+    }
+
+    .right-large {
+        right: -8.5rem;
+    }
+
+    .right-large > div > p {
+        width: 80%;
+    }
+}

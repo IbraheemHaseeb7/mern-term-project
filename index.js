@@ -23,6 +23,7 @@ const commentRoutes = require("./routes/Comment");
 const friendsRoutes = require("./routes/Friends");
 const friendRequestRoutes = require("./routes/FriendRequest");
 const chatRoutes = require("./routes/Chat");
+const contactRoutes = require("./routes/Contact");
 
 // Setting middlewares and view engine
 app.use(express.static(__dirname + "\\public"));
@@ -51,6 +52,7 @@ app.use("/api/friendRequests", friendRequestRoutes);
 app.use("/api/friends", friendsRoutes);
 app.use("/", pageRoutes);
 app.use("/api/chats", chatRoutes);
+app.use("/contactus", contactRoutes);
 
 // socket testing
 socketHandler(io);

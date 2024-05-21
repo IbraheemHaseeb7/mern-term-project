@@ -1,0 +1,43 @@
+body {
+    background-color: var(--main);
+    color: var(--white);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+form {
+    width: 30rem;
+    display: grid;
+    grid-auto-rows: 3rem;
+    /* justify-items: center; */
+    align-items: center;
+}
+
+form input,
+form textarea {
+    width: calc(100% - 1rem);
+    padding: 0.25rem 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
+    resize: none;
+    height: 100%;
+    font-size: 1.25rem;
+}
+
+form button {
+    margin-top: 3rem;
+    height: 3rem;
+}
+
+@media screen and (max-width: 768px) {
+    form {
+        width: 90%;
+    }
+}

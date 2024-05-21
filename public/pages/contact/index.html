@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Contact Us</title>
+        <link
+            href="/pages/landing/MainStyles.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="/pages/contact/styles.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+    </head>
+    <body>
+        <nav>
+            <div class="logo-container">
+                <img src="/assets/general/bg.png" alt="logo" />
+            </div>
+            <ul>
+                <li><a>About</a></li>
+                <li><a>Events</a></li>
+                <li><a>Explore</a></li>
+                <li><a href="/contactus">Contact</a></li>
+            </ul>
+            <div class="sign-up-container">
+                <a href="/login">
+                    <button class="btn outline-btn">Log in</button>
+                </a>
+                <a href="/signup">
+                    <button class="btn">Sign Up</button>
+                </a>
+            </div>
+            <svg class="burger-menu vbp-header-menu-button__svg">
+                <line
+                    x1="0"
+                    y1="50%"
+                    x2="100%"
+                    y2="50%"
+                    class="top"
+                    shape-rendering="crispEdges"
+                />
+                <line
+                    x1="0"
+                    y1="50%"
+                    x2="100%"
+                    y2="50%"
+                    class="middle"
+                    shape-rendering="crispEdges"
+                />
+                <line
+                    x1="0"
+                    y1="50%"
+                    x2="100%"
+                    y2="50%"
+                    class="bottom"
+                    shape-rendering="crispEdges"
+                />
+            </svg>
+            <menu>
+                <div class="logo-container">
+                    <img src="/assets/general/bg.png" alt="logo" />
+                </div>
+                <ul>
+                    <li><a>About</a></li>
+                    <li><a>Events</a></li>
+                    <li><a>Explore</a></li>
+                    <li><a href="/contactus">Contact</a></li>
+                </ul>
+                <div class="btn-container">
+                    <a href="/login">
+                        <button class="btn outline-btn">Log in</button>
+                    </a>
+                    <a href="/signup">
+                        <button class="btn">Sign Up</button>
+                    </a>
+                </div>
+            </menu>
+        </nav>
+        <div class="container">
+            <h1>Contact Us</h1>
+            <form class="contact-us-form" action="/contact" method="POST">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required />
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required />
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button class="btn" type="submit">Send</button>
+            </form>
+        </div>
+    </body>
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"
+    ></script>
+    <script src="/pages/landing/Main.js"></script>
+    <script src="/pages/contact/script.js"></script>
+</html>

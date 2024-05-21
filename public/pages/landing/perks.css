@@ -1,0 +1,112 @@
+.perks-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.perks-container > .heading {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 3rem 0;
+}
+
+.perks-container > .heading > h1 {
+    font-size: 4rem;
+}
+
+.perks-container > .heading > p {
+    font-size: 2rem;
+}
+
+.perk-options {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(3, 33.33%);
+
+    justify-items: center;
+    align-items: center;
+    row-gap: 2rem;
+}
+
+.perk {
+    background-color: var(--white);
+    position: relative;
+    width: 80%;
+    height: 27rem;
+
+    overflow: hidden;
+}
+
+.perk > img {
+    width: 100%;
+    height: 80%;
+    border-radius: 1rem;
+    
+    object-fit: cover;
+    position: relative;
+}
+
+.perk > img::after {
+    content: "";
+    position: absolute;
+    width: 200rem;
+    height: 200rem;
+    background-color: var(--accent);
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
+.perk > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+@media screen and (max-width: 968px) {
+    .perk-options {
+        grid-template-columns: repeat(2, 50%);
+    }
+
+    .perks-container > .heading > h1 {
+        font-size: 3rem;
+    }
+
+    .perks-container > .heading > p {
+        font-size: 1.5rem;
+    } 
+}
+
+@media screen and (max-width: 768px) {
+    .perk-options {
+        grid-template-columns: repeat(1, 100%);
+    }
+
+    .perks-container > .heading > h1 {
+        font-size: 2.5rem;
+    }
+
+    .perks-container > .heading > p {
+        font-size: 1.25rem;
+    } 
+}   
+
+@media screen and (max-width: 568px) {
+
+    .perks-container > .heading > h1 {
+        font-size: 2rem;
+    }
+
+    .perks-container > .heading > p {
+        font-size: 1rem;
+        text-align: center;
+    } 
+    
+}
