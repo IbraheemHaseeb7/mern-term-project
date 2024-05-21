@@ -38,7 +38,7 @@ router.get("/signup", (req, res) => {
     res.render("auth.ejs", { title: "Sign Up" });
 });
 
-router.get("/profile/:userId", async (req, res) => {
+router.get("/profile/:userId", authForPages, async (req, res) => {
     const { userId } = req.params;
     res.locals.layout = true;
 
